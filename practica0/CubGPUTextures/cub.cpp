@@ -10,16 +10,26 @@ cub::cub()
     p = 1.0;
 
     // Vertices of a unit cube centered at origin, sides aligned with axes
-    vertices[0] = point4(0.0,0.0,1.0,1.0);
-    vertices[1] = point4( 0.0,  2.0*sqrt(2.0)/3.0,  -1.0/3.0, 1.0 );
-    vertices[2] = point4(  sqrt(6.0)/3.0,  -sqrt(2.0)/3.0,  -1.0/3.0, 1.0 );
-    vertices[3] = point4(  sqrt(6.0)/3.0, -0.5,  0.5, 1.0 );
+    vertices[0] = point4( -0.5, -0.5,  0.5, 1.0 );
+    vertices[1] = point4( -0.5,  0.5,  0.5, 1.0 );
+    vertices[2] = point4(  0.5,  0.5,  0.5, 1.0 );
+    vertices[3] = point4(  0.5, -0.5,  0.5, 1.0 );
+    vertices[4] = point4( -0.5, -0.5, -0.5, 1.0 );
+    vertices[5] = point4( -0.5,  0.5, -0.5, 1.0 );
+    vertices[6] = point4(  0.5,  0.5, -0.5, 1.0 );
+    vertices[7] = point4(  0.5, -0.5, -0.5, 1.0 );
 
     // RGBA colors
     vertex_colors[0] =    color4( 0.0, 0.0, 0.0, 1.0 );  // black
     vertex_colors[1] =    color4( 1.0, 0.0, 0.0, 1.0 );  // red
     vertex_colors[2] =    color4( 1.0, 1.0, 0.0, 1.0 );  // yellow
     vertex_colors[3] =    color4( 0.0, 1.0, 0.0, 1.0 );  // green
+    vertex_colors[4] =    color4( 0.0, 0.0, 1.0, 1.0 );  // blue
+    vertex_colors[5] =    color4( 1.0, 0.0, 1.0, 1.0 );  // magenta
+    vertex_colors[6] =    color4( 1.0, 1.0, 1.0, 1.0 );  // white
+    vertex_colors[7] =    color4( 0.0, 1.0, 1.0, 1.0 );  // cyan
+
+
 
 }
 
