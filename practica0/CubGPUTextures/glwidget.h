@@ -1,7 +1,8 @@
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
-#include "cub.h"
+//#include "cub.h"
+#include "tetraedre.h"
 
 #include <QtWidgets>
 #include <QtOpenGL>
@@ -41,7 +42,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
 
 private:
-    cub *c;
+    tetraedre *t;
     int xRot;
     int yRot;
     int zRot;

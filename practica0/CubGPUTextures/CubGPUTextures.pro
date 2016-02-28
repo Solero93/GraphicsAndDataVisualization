@@ -15,14 +15,16 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     glwidget.cpp \
     cub.cpp \
-    Common.cpp
+    Common.cpp \
+    tetraedre.cpp
 
 HEADERS  += mainwindow.h \
     vec.h \
     mat.h \
     glwidget.h \
     cub.h \
-    Common.h
+    Common.h \
+    tetraedre.h
 
 FORMS    += mainwindow.ui
 

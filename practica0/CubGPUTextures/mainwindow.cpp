@@ -29,7 +29,7 @@ MainWindow::MainWindow()
         xSlider->setValue(15 * 16);
         ySlider->setValue(345 * 16);
         zSlider->setValue(0 * 16);
-        setWindowTitle(tr("Cub GL GPU"));
+        setWindowTitle(tr("Tetraedre GL GPU"));
     }
 
     QSlider *MainWindow::createSlider()

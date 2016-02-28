@@ -9,7 +9,7 @@
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
 {
-    c = 0;
+    t = 0;
     xRot = 0;
     yRot = 0;
     zRot = 0;
@@ -126,12 +126,12 @@ void GLWidget::initializeGL()
 
     qglClearColor(qtPurple.dark());
 
-    c = new cub();
-    c->make();
+    t = new tetraedre();
+    t->make();
 
-    c->toGPU(program);
+    t->toGPU(program);
 
-    c->draw();
+    t->draw();
 
 }
 
@@ -147,8 +147,8 @@ void GLWidget::paintGL()
                        RotateY( yRot / 16.0 ) *
                        RotateZ( zRot / 16.0 ) );
 
-   c->aplicaTG(transform);
-   c->draw();
+   t->aplicaTG(transform);
+   t->draw();
 
 }
 
