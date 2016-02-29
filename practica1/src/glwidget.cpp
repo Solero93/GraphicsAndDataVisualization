@@ -146,6 +146,7 @@ void GLWidget::initializeGL() {
     // Creacio d'una llum per apoder modificar el seus valors amb la interficie
     Llum *l = new Llum(Puntual);
     mon->addLlum(l);
+    // TODO Add toGPULlum
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
