@@ -10,6 +10,7 @@ Objecte::Objecte(int npoints, QString n) : numPoints(npoints){
     points = new point4[numPoints];
     colors = new point4[numPoints];
     readObj(n);
+    material = new Material();
     make(); // TODO falta un new Material y quitar make()
 }
 
@@ -42,7 +43,7 @@ void Objecte::toGPU(QGLShaderProgram *pr) {
 void Objecte::draw(){
 
     //TODO También hay que pasar su material a la GPU
-
+    material->toGPU(program);
     // Aqui es torna a repetir el pas de dades a la GPU per si hi ha més d'un objecte
     glBindBuffer( GL_ARRAY_BUFFER, buffer );
 

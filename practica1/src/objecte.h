@@ -7,6 +7,7 @@
 #include <cara.h>
 #include <QGLShaderProgram>
 #include <QOpenGLTexture>
+#include <material.h>
 
 using namespace std;
 
@@ -28,6 +29,8 @@ protected:
     point4 *colors;
 
     int Index; // index de control del numero de vertexs a posar a la GPU
+
+    Material* material;
 
     QGLShaderProgram *program;
 public:
