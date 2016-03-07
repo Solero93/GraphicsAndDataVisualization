@@ -18,12 +18,22 @@ struct MaterialBuffer {
     float shininess;
 };
 
-uniform MaterialBuffer buffer;
+uniform MaterialBuffer bufferMat;
 
+struct LightsBuffer {
+    vec4 position;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float angle;
+};
+
+uniform LightsBuffer bufferLights[5];
 
 void main()
 {
   gl_Position = vPosition;
-  color = vec4(buffer.ambient[0],buffer.ambient[1],buffer.ambient[2],1.0);
+  color = vec4(bufferLights[2].ambient[0],bufferLights[2].ambient[1],bufferLights[2].ambient[2],1.0);
+  //color = vec4(bufferMat.ambient[0],bufferMat.ambient[1],bufferMat.ambient[2],1.0);
   //color = vColor;
 }
