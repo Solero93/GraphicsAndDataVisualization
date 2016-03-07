@@ -9,20 +9,25 @@ Material::Material() {
 }
 
 Material::~Material(){
-
+    delete ambient;
+    delete diffuse;
+    delete specular;
+    delete shininess;
 }
 
 void Material::toGPU(QGLShaderProgram *pr) {
-    gl_buffer.ambient = pr->uniformLocation("buffer.ambient");
-    gl_buffer.diffuse = pr->uniformLocation("buffer.diffuse");
-    gl_buffer.shininess = pr->uniformLocation("buffer.shininess");
-    gl_buffer.specular = pr->uniformLocation("buffer.specular");
-   // glGenBuffers( 1, &gl_buffer );
-   // glBindBuffer( GL_ARRAY_BUFFER, gl_buffer );
+    struct {
+        GLuint ambient;
+        GLuint diffuse;
+        GLuint specular;
+        GLuint shininess;
+    } gl_buffer;
 
-    //glBufferData( GL_ARRAY_BUFFER, sizeof(point4)*Index + sizeof(point4)*Index, NULL, GL_STATIC_DRAW );
-   // glEnable( GL_DEPTH_TEST );
-//    glEnable( GL_TEXTURE_2D );
+    gl_buffer.ambient = pr->uniformLocation("matBuffer.ambient");
+    gl_buffer.diffuse = pr->uniformLocation("matBuffer.diffuse");
+    gl_buffer.shininess = pr->uniformLocation("matBuffer.shininess");
+    gl_buffer.specular = pr->uniformLocation("matBuffer.specular");
+
     glUniform3fv(gl_buffer.ambient,1,ambient);
     glUniform3fv(gl_buffer.diffuse,1,diffuse);
     glUniform3fv(gl_buffer.specular,1,specular);

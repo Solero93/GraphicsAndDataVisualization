@@ -20,12 +20,6 @@ public:
     vec3 diffuse;
     vec3 specular;
     float shininess;
-    struct {
-        GLuint ambient;
-        GLuint diffuse;
-        GLuint specular;
-        GLuint shininess;
-    } gl_buffer;
 
     virtual void toGPU(QGLShaderProgram *p);
 };
