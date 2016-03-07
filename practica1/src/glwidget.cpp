@@ -152,6 +152,7 @@ void GLWidget::initializeGL() {
     mon->addLlum(l2);
     mon->addLlum(l3);
     // TODO Add toGPULlum
+    mon->llumsToGPU(program);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
@@ -181,7 +182,6 @@ void GLWidget::newObj(QString fichero){
     Objecte * obj = new Objecte(100000, fichero);
     obj->toGPU(program);
     mon->addObjecte(obj);
-    mon->llumsToGPU(program);
 
     updateGL();
 }
