@@ -1,6 +1,8 @@
 #ifndef ESCENA_H
 #define ESCENA_H
 
+#define MAXLLUM 5
+
 #include <cmath>
 #include <iostream>
 #include <stdlib.h>
@@ -29,14 +31,13 @@ public:
 
     void addObjecte(Objecte *obj);
 
-
     void draw();
 
     void addLlum(Llum *l);
     Llum *getLlumActual();
     void llumsToGPU(QGLShaderProgram *program);
 
-    vector <Objecte*> elements;
+    vector<Objecte*> elements;
     vector<Llum*> llums;
 
 };

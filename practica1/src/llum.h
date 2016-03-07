@@ -9,6 +9,14 @@ enum Lights {Puntual, Direccional, SpotLight};
 // Classe que representa els atributs d'una llum
 class Llum {
     public:
+        GLuint id;
+        vec4 position;
+        vec3 ambient;
+        vec3 diffuse;
+        vec3 specular;
+        float angle;
+        bool isActive;
+
         Llum(Lights l);
         void setTipusLlum(Lights t);
         vec3 getDiffuseIntensity();
