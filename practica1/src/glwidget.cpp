@@ -18,19 +18,23 @@ GLWidget::~GLWidget() {
 
 void GLWidget::activaToonShader() {
     //A implementar a la practica 1
+    InitShader("://resources/vshaderShader.glsl", "://resources/fshaderShader.glsl");
 }
 
 void GLWidget::activaPhongShader() {
     //A implementar a la practica 1
+    InitShader("://resources/vshaderPhong.glsl", "://resources/fshaderPhong.glsl");
 }
 
 void GLWidget::activaGouraudShader() {
-    //A implementar a la practica 1
+    //Added the path to activate the goraud shader
+    InitShader("://resources/vshaderGouraud.glsl", "://resources/fshaderGouraud.glsl");
 }
 
 void GLWidget::activaPhongTex() {
-    //A implementar a la practica 1
+    //to implement
 }
+
 
 void GLWidget::activaGouraudTex() {
     //A implementar a la practica 1
@@ -140,6 +144,8 @@ void GLWidget::initializeGL() {
     glEnable(GL_CULL_FACE);
     glEnable(GL_RGBA);
     glEnable(GL_DOUBLE);
+    //Added GL_NMORMALIZE
+    glEnable(GL_NORMALIZE);
 
     initShadersGPU();
 
