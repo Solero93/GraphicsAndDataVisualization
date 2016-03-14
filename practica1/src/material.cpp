@@ -8,12 +8,12 @@ Material::Material() {
     shininess = 0.078125;
 }
 
-Material::~Material(){
+/*Material::~Material(){
     delete ambient;
     delete diffuse;
     delete specular;
     delete shininess;
-}
+}*/
 
 void Material::toGPU(QGLShaderProgram *pr) {
     struct {

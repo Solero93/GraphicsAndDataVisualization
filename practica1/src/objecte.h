@@ -46,6 +46,8 @@ public:
 
     virtual void draw();
 
+    vector<point4> calcularNormalVertexs();
+
 private:
     void construeix_cara ( char **words, int nwords);
 };

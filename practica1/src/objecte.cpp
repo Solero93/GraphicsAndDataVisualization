@@ -44,6 +44,11 @@ void Objecte::draw(){
 
     //TODO También hay que pasar su material a la GPU
     material->toGPU(program);
+
+    vector<point4> normals = this->calcularNormalVertexs();
+
+
+
     // Aqui es torna a repetir el pas de dades a la GPU per si hi ha més d'un objecte
     glBindBuffer( GL_ARRAY_BUFFER, buffer );
 
@@ -197,4 +202,20 @@ void Objecte::construeix_cara ( char **words, int nwords) {
     }
     face.color = vec4(1.0, 0.0, 0.0, 1.0);
     this->cares.push_back(face);
+}
+
+vector<point4> Objecte::calcularNormalVertexs(){
+    vector<point4> normals[numPoints];
+    for (int i=0; i < cares.size(); i++){
+        vector<vec3> vertexs1 = (vertexs[cares[i].idxVertices[0]],vertexs[cares[i].idxVertices[1]],vertexs[cares[i].idxVertices[2]]);
+        vec3 currNormal = cares[i].calculaNormal(vertexs1);
+        for (int j=0; j<3; j++){
+            int id = cares[i].idxVertices[j];
+            normals[id]+=cares[i].calcular;
+        }
+    }
+    for (int i=0; i< normals.size(); i++){
+        normals[i] /= length(normals[i]);
+    }
+    return normals;
 }
