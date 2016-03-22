@@ -4,11 +4,13 @@
 Objecte::Objecte(int npoints, QObject *parent) : numPoints(npoints) ,QObject(parent){
     points = new point4[numPoints];
     colors = new point4[numPoints];
+    normals = new vec4[numPoints];
 }
 
 Objecte::Objecte(int npoints, QString n) : numPoints(npoints){
     points = new point4[numPoints];
     colors = new point4[numPoints];
+    normals = new vec4[numPoints];
     readObj(n);
     material = new Material();
     make(); // TODO falta un new Material y quitar make()
@@ -18,6 +20,7 @@ Objecte::Objecte(int npoints, QString n) : numPoints(npoints){
 Objecte::~Objecte(){
     delete points;
     delete colors;
+    delete normals;
 }
 
 /**
@@ -45,24 +48,25 @@ void Objecte::draw(){
     //TODO También hay que pasar su material a la GPU
     material->toGPU(program);
 
-    vector<point4> normals = this->calcularNormalVertexs();
-
-
-
     // Aqui es torna a repetir el pas de dades a la GPU per si hi ha més d'un objecte
     glBindBuffer( GL_ARRAY_BUFFER, buffer );
 
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4)*Index, &points[0] );
     glBufferSubData( GL_ARRAY_BUFFER, sizeof(point4)*Index, sizeof(point4)*Index, &colors[0] );
+    glBufferSubData( GL_ARRAY_BUFFER, sizeof(point4)*Index, sizeof(point4)*Index, &normals[0] );
 
     int vertexLocation = program->attributeLocation("vPosition");
     int colorLocation = program->attributeLocation("vColor");
+    int normalLocation = program->attributeLocation("vNormal");
 
     program->enableAttributeArray(vertexLocation);
     program->setAttributeBuffer("vPosition", GL_FLOAT, 0, 4);
 
     program->enableAttributeArray(colorLocation);
     program->setAttributeBuffer("vColor", GL_FLOAT, sizeof(point4)*Index, 4);
+
+    program->enableAttributeArray(normalLocation);
+    program->setAttributeBuffer("vNormal", GL_FLOAT, sizeof(point4)*Index, 4);
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glDrawArrays( GL_TRIANGLES, 0, Index );
@@ -76,11 +80,14 @@ void Objecte::make(){
         vec3( 1.0, 1.0, 0.0 )
     };
 
+    vector<point4> tmpNormals = this->calcularNormalVertexs();
+
     //TODO Hacer que el material se aplique en lugar de estos colores aleatorios
     Index = 0;
     for(unsigned int i=0; i<cares.size(); i++){
         for(unsigned int j=0; j<cares[i].idxVertices.size(); j++){
             points[Index] = vertexs[cares[i].idxVertices[j]];
+            normals[Index] = tmpNormals[cares[i].idxVertices[j]];
             colors[Index] = vec4(base_colors[j%4], 1.0);
             Index++;
         }
@@ -204,18 +211,22 @@ void Objecte::construeix_cara ( char **words, int nwords) {
     this->cares.push_back(face);
 }
 
-vector<point4> Objecte::calcularNormalVertexs(){
-    vector<point4> normals[numPoints];
+vector<vec4> Objecte::calcularNormalVertexs(){
+    vector<vec4> normals(numPoints);
     for (int i=0; i < cares.size(); i++){
-        vector<vec3> vertexs1 = (vertexs[cares[i].idxVertices[0]],vertexs[cares[i].idxVertices[1]],vertexs[cares[i].idxVertices[2]]);
-        vec3 currNormal = cares[i].calculaNormal(vertexs1);
-        for (int j=0; j<3; j++){
+        cares[i].calculaNormal(vertexs);
+        for (int j=0; j < cares[i].idxVertices.size(); j++){
             int id = cares[i].idxVertices[j];
-            normals[id]+=cares[i].calcular;
+            normals[id] += vec4(
+               cares[i].normal[0],
+               cares[i].normal[1],
+               cares[i].normal[2],
+               0.0
+            );
         }
     }
-    for (int i=0; i< normals.size(); i++){
-        normals[i] /= length(normals[i]);
+    for (int i=0; i < vertexs.size(); i++){
+        normals[i] = normalize(normals[i]); // We normalize the vector
     }
     return normals;
 }

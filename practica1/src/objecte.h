@@ -27,6 +27,7 @@ protected:
     int     numPoints;
     point4 *points;
     point4 *colors;
+    vec4 *normals;
 
     int Index; // index de control del numero de vertexs a posar a la GPU
 

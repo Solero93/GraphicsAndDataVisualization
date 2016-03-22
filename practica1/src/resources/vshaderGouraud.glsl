@@ -34,15 +34,14 @@ uniform LightsBuffer bufferLights[5];
 void main()
 {
   gl_Position = vPosition;
-  int c[3];
+  /*int c[3];
   for (int i=0; i<3; i++){
       // TODO fix formula
     c[i] = bufferMat.diffuse[i] * bufferLights[0].diffuse[i] * max(dot(L,N),0.0) +
             bufferMat.specular[i] * bufferLights[0].specular[i] * (max(dot(N,H),0.0)**bufferMat.shininess) +
             bufferMat.ambient[i] * bufferLights[0].ambient[i];
   }
-  color = vec4(c[0],c[1],c[2],1.0);
-  //color = vec4(bufferLights[2].ambient[0],bufferLights[2].ambient[1],bufferLights[2].ambient[2],1.0);
-  //color = vec4(bufferMat.ambient[0],bufferMat.ambient[1],bufferMat.ambient[2],1.0);
+  color = vec4(c[0],c[1],c[2],1.0);*/
+  color = vec4(abs(vNormal[0]),abs(vNormal[1]),abs(vNormal[2]),1.0);
   //color = vColor;
 }

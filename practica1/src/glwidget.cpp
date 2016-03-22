@@ -145,9 +145,10 @@ void GLWidget::initializeGL() {
     glEnable(GL_RGBA);
     glEnable(GL_DOUBLE);
     //Added GL_NMORMALIZE
-    glEnable(GL_NORMALIZE);
+    //glEnable(GL_NORMALIZE);
 
-    initShadersGPU();
+    //initShadersGPU();
+    activaGouraudShader();
 
     // Creacio d'una llum per apoder modificar el seus valors amb la interficie
     Llum *l1 = new Llum(Puntual);
@@ -157,6 +158,7 @@ void GLWidget::initializeGL() {
     mon->addLlum(l1);
     mon->addLlum(l2);
     mon->addLlum(l3);
+
     // TODO Add toGPULlum
     mon->llumsToGPU(program);
 
