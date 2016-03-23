@@ -58,9 +58,6 @@ void main()
     }
   }
   color = vec4(c[0],c[1],c[2],1.0);
-  //color = vec4(c[0],0.0,1.0,1.0);
-  //color = vec4(abs(vNormal[0]),abs(vNormal[1]),abs(vNormal[2]),1.0);
-  //color = vColor;
 }
 
 vec4 calculateL(int j){
@@ -69,7 +66,7 @@ vec4 calculateL(int j){
     } else if (bufferLights[j].angle == 0.0){
         return bufferLights[j].position - vPosition;
     } else {
-        return vec4(1.0,1.0,1.0,0.0); // TODO Fix
+        return vec4(0.0,0.0,0.0,0.0); // TODO Fix
     }
 }
 

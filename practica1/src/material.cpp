@@ -23,10 +23,10 @@ void Material::toGPU(QGLShaderProgram *pr) {
         GLuint shininess;
     } gl_buffer;
 
-    gl_buffer.ambient = pr->uniformLocation("matBuffer.ambient");
-    gl_buffer.diffuse = pr->uniformLocation("matBuffer.diffuse");
-    gl_buffer.shininess = pr->uniformLocation("matBuffer.shininess");
-    gl_buffer.specular = pr->uniformLocation("matBuffer.specular");
+    gl_buffer.ambient = pr->uniformLocation("bufferMat.ambient");
+    gl_buffer.diffuse = pr->uniformLocation("bufferMat.diffuse");
+    gl_buffer.shininess = pr->uniformLocation("bufferMat.shininess");
+    gl_buffer.specular = pr->uniformLocation("bufferMat.specular");
 
     glUniform3fv(gl_buffer.ambient,1,ambient);
     glUniform3fv(gl_buffer.diffuse,1,diffuse);
