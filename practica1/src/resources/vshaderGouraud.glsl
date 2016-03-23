@@ -67,16 +67,16 @@ vec4 calculateL(int j){
         return bufferLights[j].position - vPosition;
     } else {
         vec4 rayDirection = - normalize(vPosition + bufferLights[j].direction);
-
         vec4 coneDirection = normalize(bufferLights[j].direction);
 
+        //TODO shouldn't do an arccos inside a vertexShader
         float lightToSurfaceAngle = degrees(acos(dot(rayDirection, coneDirection)));
-        if(lightToSurfaceAngle > bufferLights[j].angle){
+        if (lightToSurfaceAngle > bufferLights[j].angle){
             return vec4(0.0, 0.0, 0.0, 0.0);
-        }else{
-        return vec4(0.50,0.50,0.50, 0.0); // TODO Fix
+        } else {
+            return rayDirection;
+        }
     }
-}
 }
 vec4 calculateH(vec4 L){
     vec4 F = vec4(0.0, 0.0, 10.0, 1.0); // Focus de l'observador
