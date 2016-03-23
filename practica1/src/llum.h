@@ -1,6 +1,8 @@
 #ifndef LLUM_H
 #define LLUM_H
 
+#define NONE vec4(0.0,0.0,0.0,0.0)
+
 #include <Common.h>
 
 // Tipus de llums

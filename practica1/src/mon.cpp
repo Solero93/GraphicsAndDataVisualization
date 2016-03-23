@@ -38,7 +38,7 @@ void Mon::llumsToGPU(QGLShaderProgram *pr){
 
     for (int i=0; i<this->llums.size(); i++){
         gl_buffer[i].position = pr->uniformLocation(QString("bufferLights[%1].position").arg(i));
-        gl_buffer[i].position = pr->uniformLocation(QString("bufferLights[%1].direction").arg(i));
+        gl_buffer[i].direction = pr->uniformLocation(QString("bufferLights[%1].direction").arg(i));
         gl_buffer[i].ambient = pr->uniformLocation(QString("bufferLights[%1].ambient").arg(i));
         gl_buffer[i].diffuse = pr->uniformLocation(QString("bufferLights[%1].diffuse").arg(i));
         gl_buffer[i].specular = pr->uniformLocation(QString("bufferLights[%1].specular").arg(i));
