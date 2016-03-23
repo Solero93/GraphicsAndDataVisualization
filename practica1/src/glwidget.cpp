@@ -151,12 +151,12 @@ void GLWidget::initializeGL() {
     activaGouraudShader();
 
     // Creacio d'una llum per apoder modificar el seus valors amb la interficie
-    Llum *l1 = new Llum(Puntual);
-    Llum *l2 = new Llum(Direccional);
+    /*Llum *l1 = new Llum(Puntual);
+    Llum *l2 = new Llum(Direccional);*/
     Llum *l3 = new Llum(SpotLight);
 
-    mon->addLlum(l1);
-    mon->addLlum(l2);
+    //mon->addLlum(l1);
+    //mon->addLlum(l2);
     mon->addLlum(l3);
 
     mon->llumsToGPU(program);

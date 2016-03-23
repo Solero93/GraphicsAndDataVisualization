@@ -6,7 +6,7 @@
 #define OUT out
 #endif
 
-#define MAXLLUM 3
+#define MAXLLUM 1
 #define NONE vec4(0.0,0.0,0.0,0.0)
 
 IN vec4 vPosition;
@@ -66,10 +66,18 @@ vec4 calculateL(int j){
     } else if (bufferLights[j].angle == 0.0){
         return bufferLights[j].position - vPosition;
     } else {
-        return vec4(0.0,0.0,0.0,0.0); // TODO Fix
+        vec4 rayDirection = - normalize(vPosition + bufferLights[j].direction);
+
+        vec4 coneDirection = normalize(bufferLights[j].direction);
+
+        float lightToSurfaceAngle = degrees(acos(dot(rayDirection, coneDirection)));
+        if(lightToSurfaceAngle > bufferLights[j].angle){
+            return vec4(0.0, 0.0, 0.0, 0.0);
+        }else{
+        return vec4(0.50,0.50,0.50, 0.0); // TODO Fix
     }
 }
-
+}
 vec4 calculateH(vec4 L){
     vec4 F = vec4(0.0, 0.0, 10.0, 1.0); // Focus de l'observador
     return L + (F - vPosition);
