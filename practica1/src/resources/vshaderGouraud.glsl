@@ -6,6 +6,9 @@
 #define OUT out
 #endif
 
+#define MAXLLUM 1
+#define NONE vec4(0.0,0.0,0.0,0.0)
+
 IN vec4 vPosition;
 IN vec4 vColor;
 IN vec4 vNormal;

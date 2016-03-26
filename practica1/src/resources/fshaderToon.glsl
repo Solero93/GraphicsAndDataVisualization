@@ -6,7 +6,9 @@
 #define OUT out
 #endif
 
-IN vec4 color;
+#define MAXLLUM 1
+
+IN vec4 norm;
 IN vec4 luces;
 
 struct LightsBuffer {
@@ -18,12 +20,12 @@ struct LightsBuffer {
     float angle;
 };
 
-uniform LightsBuffer bufferLights[3];
+uniform LightsBuffer bufferLights[MAXLLUM];
 
 void main(){
     float intensity;
     vec4 colorv2;
-    intensity = dot(bufferLights[0].direction,normalize(color));
+    intensity = dot(-bufferLights[0].direction,normalize(norm));
 
     if (intensity > 0.95){
         colorv2 = vec4(1.0,0.5,0.5,1.0);
@@ -36,4 +38,3 @@ void main(){
     }
     gl_FragColor = colorv2;
 }
-
