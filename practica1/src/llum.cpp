@@ -34,35 +34,46 @@ void Llum::setTipusLlum(Lights t) {
     this->isActive = true;
 }
 
-vec3 Llum::getDiffuseIntensity() {
-// A canviar
-    if (isActive){
-        return (this->diffuse);
-    } else {
-        return (NULL);
-    }
+vec4 Llum::getPosition() {
+    return this->position;
+}
+vec4 Llum::getDirection(){
+    return this->direction;
+}
+vec3 Llum::getAmbient() {
+    return isActive ? this->ambient: vec3(0.0,0.0,0.0);
+}
+vec3 Llum::getDiffuse() {
+    return isActive ? this->diffuse : vec3(0.0,0.0,0.0);
+}
+vec3 Llum::getSpecular() {
+    return isActive ? this->specular : vec3(0.0,0.0,0.0);
+}
+float Llum::getAngle() {
+    return this->angle;
 }
 
-vec4 Llum::getLightPosition() {
-    // A canviar
-    if (isActive){
-        return (this->position);
-    } else {
-        return (NULL);
-    }
+void Llum::setPosition(vec4 v) {
+    this->position = v;
 }
-
-void Llum::setDiffuseIntensity(vec3 i) {
+void Llum::setDirection(vec4 v) {
+    this->direction = v;
+}
+void Llum::setAmbient(vec3 i){
+    this->ambient = i;
+}
+void Llum::setDiffuse(vec3 i) {
     this->diffuse = i;
 // el float que es reb ha de multiplicar els tres valors de la intensitat digusa de la llum
 }
-
-void Llum::setLightPosition(vec4 v) {
-    this->position = v;
+void Llum::setSpecular(vec3 i){
+    this->specular = i;
+}
+void Llum::setAngle(float a){
+    this->angle = a;
 }
 
 void Llum::switchOnOff() {
     this->isActive = !this->isActive;
     // Si esta en on la posa a off i a l'inreves
-
 }

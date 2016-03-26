@@ -22,10 +22,19 @@ class Llum {
 
         Llum(Lights l);
         void setTipusLlum(Lights t);
-        vec3 getDiffuseIntensity();
-        vec4 getLightPosition();
-        void setDiffuseIntensity(vec3 i);
-        void setLightPosition(vec4 v);
+        vec4 getPosition();
+        vec4 getDirection();
+        vec3 getAmbient();
+        vec3 getDiffuse();
+        vec3 getSpecular();
+        float getAngle();
+
+        void setPosition(vec4 v);
+        void setDirection(vec4 v);
+        void setAmbient(vec3 i);
+        void setDiffuse(vec3 i);
+        void setSpecular(vec3 i);
+        void setAngle(float a);
         void switchOnOff();
 };
 

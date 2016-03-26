@@ -68,34 +68,34 @@ void GLWidget::changeSpotLight() {
 }
 void GLWidget::updateXPositionLight(int xposition) {
     // S'ha de modificar la posicio x de la llum activa
-    vec4 v = mon->getLlumActual()->getLightPosition();
+    vec4 v = mon->getLlumActual()->getPosition();
     v[0] = (float)xposition;
-    mon->getLlumActual()->setLightPosition(v);
+    mon->getLlumActual()->setPosition(v);
 }
 
 void GLWidget::updateYPositionLight(int yposition) {
     // S'ha de modificar la posicio y de la llum activa
-    vec4 v = mon->getLlumActual()->getLightPosition();
+    vec4 v = mon->getLlumActual()->getPosition();
     v[1] = (float)yposition;
-    mon->getLlumActual()->setLightPosition(v);
+    mon->getLlumActual()->setPosition(v);
 }
 
 void GLWidget::updateZPositionLight(int zposition) {
     // S'ha de modificar la posicio z de la llum activa
-    vec4 v = mon->getLlumActual()->getLightPosition();
+    vec4 v = mon->getLlumActual()->getPosition();
     v[2] = (float)zposition;
-    mon->getLlumActual()->setLightPosition(v);
+    mon->getLlumActual()->setPosition(v);
 }
 
 void GLWidget::updateLightIntensity(int intens) {
     // S'ha de modificar la intensitat de la llum 0. es podria canviar per la llum actual
     vec3 intensitat;
-    intensitat =  mon->getLlumActual()->getDiffuseIntensity();
+    intensitat =  mon->getLlumActual()->getDiffuse();
     intensitat[0] = intens/200.0;
     intensitat[1] = intens/200.0;
     intensitat[2] = intens/200.0; // el 200 es l'escala del scrollbar
 
-     mon->getLlumActual()->setDiffuseIntensity(intensitat);
+     mon->getLlumActual()->setDiffuse(intensitat);
 }
 
 void GLWidget::activateLight(){
@@ -248,11 +248,11 @@ void GLWidget::showAuxWindowPuntualLight(Llum *light)
     if (light == NULL)
         lightSlider->setSliderPosition(100);
     else
-        lightSlider->setSliderPosition(100*light->getDiffuseIntensity()[0]);
+        lightSlider->setSliderPosition(100*light->getDiffuse()[0]);
     connect(lightSlider,SIGNAL(valueChanged(int)),this,SLOT(updateLightIntensity(int)));
     QLabel* lightLabel = new QLabel("Light intensity = ");
     QLabel* lightLabelValue = new QLabel();
-    lightLabelValue->setNum(100 * light->getDiffuseIntensity()[0]);
+    lightLabelValue->setNum(100 * light->getDiffuse()[0]);
     connect(lightSlider,SIGNAL(valueChanged(int)),lightLabelValue,SLOT(setNum(int)));
     QHBoxLayout *hboxLight = new QHBoxLayout;
     hboxLight->addWidget(lightLabel);
@@ -268,7 +268,7 @@ void GLWidget::showAuxWindowPuntualLight(Llum *light)
     if (light == NULL)
         XSlider->setSliderPosition(100);
     else
-        XSlider->setSliderPosition(light->getLightPosition()[0]);
+        XSlider->setSliderPosition(light->getPosition()[0]);
     connect(XSlider,SIGNAL(valueChanged(int)),this,SLOT(updateXPositionLight(int)));
     QLabel* XLabel = new QLabel("X Position = ");
     QLabel* XLabelValue = new QLabel();
@@ -288,7 +288,7 @@ void GLWidget::showAuxWindowPuntualLight(Llum *light)
     if (light == NULL)
         YSlider->setSliderPosition(100);
     else
-        YSlider->setSliderPosition(light->getLightPosition()[1]);
+        YSlider->setSliderPosition(light->getPosition()[1]);
 
     connect(YSlider,SIGNAL(valueChanged(int)),this,SLOT(updateYPositionLight(int)));
     QLabel* YLabel = new QLabel("Y Position = ");
@@ -309,7 +309,7 @@ void GLWidget::showAuxWindowPuntualLight(Llum *light)
     if (light == NULL)
         ZSlider->setSliderPosition(100);
     else
-        ZSlider->setSliderPosition(light->getLightPosition()[2]);
+        ZSlider->setSliderPosition(light->getPosition()[2]);
     connect(ZSlider,SIGNAL(valueChanged(int)),this,SLOT(updateZPositionLight(int)));
     QLabel* ZLabel = new QLabel("Z Position = ");
     QLabel* ZLabelValue = new QLabel();
