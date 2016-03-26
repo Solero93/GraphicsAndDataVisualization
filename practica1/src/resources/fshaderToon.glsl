@@ -1,6 +1,7 @@
 #if __VERSION__<130
 #define IN varying
 #define OUT varying
+#define MAXLLUM 1
 #else
 #define IN in
 #define OUT out
@@ -29,7 +30,7 @@ void main(){
 
     if (intensity > 0.95){
         colorv2 = vec4(1.0,0.5,0.5,1.0);
-    }else if (intensity > 0.5){
+    }else if (intensity > 0.65){
         colorv2 = vec4(0.6,0.3,0.3,1.0);
     }else if (intensity > 0.25){
         colorv2 = vec4(0.4,0.2,0.2,1.0);

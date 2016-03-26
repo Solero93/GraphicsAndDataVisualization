@@ -4,6 +4,7 @@
 #else
 #define IN in
 #define OUT out
+#define MAXLLUM 1
 #endif
 
 #define MAXLLUM 1
