@@ -18,7 +18,7 @@ GLWidget::~GLWidget() {
 
 void GLWidget::activaToonShader() {
     //A implementar a la practica 1
-    InitShader("://resources/vshaderShader.glsl", "://resources/fshaderShader.glsl");
+    InitShader("://resources/vshaderToon.glsl", "://resources/fshaderToon.glsl");
 }
 
 void GLWidget::activaPhongShader() {
@@ -148,16 +148,18 @@ void GLWidget::initializeGL() {
     //glEnable(GL_NORMALIZE);
 
     //initShadersGPU();
-    activaGouraudShader();
+    //activaGouraudShader();
+    activaToonShader();
+
 
     // Creacio d'una llum per apoder modificar el seus valors amb la interficie
-    /*Llum *l1 = new Llum(Puntual);
-    Llum *l2 = new Llum(Direccional);*/
-    Llum *l3 = new Llum(SpotLight);
+    //Llum *l1 = new Llum(Puntual);
+    Llum *l2 = new Llum(Direccional);
+    //Llum *l3 = new Llum(SpotLight);
 
     //mon->addLlum(l1);
-    //mon->addLlum(l2);
-    mon->addLlum(l3);
+    mon->addLlum(l2);
+    //mon->addLlum(l3);
 
     mon->llumsToGPU(program);
 
