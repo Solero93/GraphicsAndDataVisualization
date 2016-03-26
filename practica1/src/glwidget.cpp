@@ -122,6 +122,7 @@ void GLWidget::InitShader(const char* vShaderFile, const char* fShaderFile){
     program->addShader(fshader);
     program->link();
     program->bind();
+    mon->llumsToGPU(program);
 }
 
 /**
@@ -149,8 +150,8 @@ void GLWidget::initializeGL() {
 
     //initShadersGPU();
     //activaGouraudShader();
-    activaToonShader();
-
+    //activaToonShader();
+    activaPhongShader();
 
     // Creacio d'una llum per apoder modificar el seus valors amb la interficie
     //Llum *l1 = new Llum(Puntual);

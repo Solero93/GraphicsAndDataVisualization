@@ -4,7 +4,9 @@
 #else
 #define IN in
 #define OUT out
+#define MAXLLUM 1
 #endif
+
 
 IN vec4 vPosition;
 IN vec4 vColor;
@@ -29,7 +31,7 @@ struct LightsBuffer {
     float angle;
 };
 
-uniform LightsBuffer bufferLights[5];
+uniform LightsBuffer bufferLights[MAXLLUM];
 
 void main()
 {

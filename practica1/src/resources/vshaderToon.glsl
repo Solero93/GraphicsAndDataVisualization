@@ -3,8 +3,10 @@
 #define OUT varying
 #else
 #define IN in
+#define MAXLLUM 1
 #define OUT out
 #endif
+
 
 IN vec4 vPosition;
 IN vec4 vColor;
