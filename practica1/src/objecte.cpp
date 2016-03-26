@@ -225,7 +225,7 @@ vector<vec4> Objecte::calcularNormalVertexs(){
             );
         }
     }
-    for (int i=0; i < vertexs.size(); i++){
+    for (int i=0; i < normals.size(); i++){
         normals[i] = normalize(normals[i]); // We normalize the vector
     }
     return normals;

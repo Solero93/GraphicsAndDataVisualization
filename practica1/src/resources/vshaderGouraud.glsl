@@ -6,9 +6,6 @@
 #define OUT out
 #endif
 
-#define MAXLLUM 1
-#define NONE vec4(0.0,0.0,0.0,0.0)
-
 IN vec4 vPosition;
 IN vec4 vColor;
 IN vec4 vNormal;
@@ -53,7 +50,7 @@ void main()
         H = normalize(calculateH(L));
         c[i] += bufferMat.diffuse[i] * bufferLights[j].diffuse[i] * max(dot(L,N),0.0) +
                 bufferMat.specular[i] * bufferLights[j].specular[i] *
-                pow(max(dot(N,H),0.0),bufferMat.shininess) +
+                pow(max(dot(N,H),0.0), bufferMat.shininess) +
                 bufferMat.ambient[i] * bufferLights[j].ambient[i];
     }
   }
@@ -61,20 +58,19 @@ void main()
 }
 
 vec4 calculateL(int j){
-    if (bufferLights[j].position == NONE){
-        return - (vPosition + bufferLights[j].direction);
-    } else if (bufferLights[j].angle == 0.0){
+    if (bufferLights[j].position == NONE) {
+        return -(bufferLights[j].direction);
+    } else if (bufferLights[j].angle == 0.0) {
         return bufferLights[j].position - vPosition;
     } else {
-        vec4 rayDirection = - normalize(vPosition + bufferLights[j].direction);
+        vec4 rayDirection = normalize(vPosition - bufferLights[j].position);
         vec4 coneDirection = normalize(bufferLights[j].direction);
 
-        //TODO shouldn't do an arccos inside a vertexShader
-        float lightToSurfaceAngle = degrees(acos(dot(rayDirection, coneDirection)));
-        if (lightToSurfaceAngle > bufferLights[j].angle){
-            return vec4(0.0, 0.0, 0.0, 0.0);
+        float lightToSurfaceAngle = acos(dot(rayDirection, coneDirection));
+        if (lightToSurfaceAngle > bufferLights[j].angle) {
+            return NONE;
         } else {
-            return rayDirection;
+            return -rayDirection;
         }
     }
 }
