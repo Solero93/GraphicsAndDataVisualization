@@ -8,33 +8,12 @@
 
 IN vec4 vPosition;
 IN vec4 vColor;
+IN vec4 vNormal;
 
-OUT vec4 color;
-
-struct MaterialBuffer {
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-    float shininess;
-};
-
-uniform MaterialBuffer bufferMat;
-
-struct LightsBuffer {
-    vec4 position;
-    vec4 direction;
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-    float angle;
-};
-
-uniform LightsBuffer bufferLights[5];
+OUT vec4 norm;
 
 void main()
 {
-  gl_Position = vPosition;
-  color = vec4(bufferLights[2].ambient[0],bufferLights[2].ambient[1],bufferLights[2].ambient[2],1.0);
-  //color = vec4(bufferMat.ambient[0],bufferMat.ambient[1],bufferMat.ambient[2],1.0);
-  //color = vColor;
+    gl_Position = vPosition;
+    norm = vNormal;
 }

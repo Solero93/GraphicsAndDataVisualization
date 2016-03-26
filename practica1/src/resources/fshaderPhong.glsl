@@ -29,7 +29,6 @@ struct LightsBuffer {
 
 uniform LightsBuffer bufferLights[MAXLLUM];
 
-IN vec4 pos;
 IN vec4 norm;
 
 vec4 calculateL(int);
@@ -59,9 +58,9 @@ vec4 calculateL(int j){
     if (bufferLights[j].position == NONE) {
         return -(bufferLights[j].direction);
     } else if (bufferLights[j].angle == 0.0) {
-        return bufferLights[j].position - pos;
+        return bufferLights[j].position - gl_FragCoord;
     } else {
-        vec4 rayDirection = normalize(pos - bufferLights[j].position);
+        vec4 rayDirection = normalize(gl_FragCoord - bufferLights[j].position);
         vec4 coneDirection = normalize(bufferLights[j].direction);
 
         float lightToSurfaceAngle = acos(dot(rayDirection, coneDirection));
@@ -74,5 +73,5 @@ vec4 calculateL(int j){
 }
 vec4 calculateH(vec4 L){
     vec4 F = vec4(0.0, 0.0, 10.0, 1.0); // Focus de l'observador
-    return L + (F - pos);
+    return L + (F - gl_FragCoord);
 }
