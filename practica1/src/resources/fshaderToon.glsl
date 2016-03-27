@@ -7,7 +7,6 @@
 #endif
 
 IN vec4 norm;
-IN vec4 luces;
 
 uniform int numLlums;
 

@@ -59,5 +59,4 @@ void Mon::llumsToGPU(QGLShaderProgram *pr){
 
 void Mon::addLlum(Llum *l) {
     llums.push_back(l);
-
 }

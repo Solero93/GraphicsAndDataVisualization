@@ -1,7 +1,7 @@
 #ifndef ESCENA_H
 #define ESCENA_H
 
-#define MAXLLUM 3
+#define MAXLLUM 20
 
 #include <cmath>
 #include <iostream>
