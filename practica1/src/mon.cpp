@@ -53,6 +53,8 @@ void Mon::llumsToGPU(QGLShaderProgram *pr){
 
         this->llums[i]->id = i;
     }
+    GLuint numLlums = pr->uniformLocation("numLlums");
+    glUniform1i(numLlums, this->llums.size());
 }
 
 void Mon::addLlum(Llum *l) {

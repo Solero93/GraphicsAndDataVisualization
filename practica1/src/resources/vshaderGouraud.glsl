@@ -4,17 +4,15 @@
 #else
 #define IN in
 #define OUT out
-#define MAXLLUM 1
 #endif
-
-#define MAXLLUM 1
-#define NONE vec4(0.0,0.0,0.0,0.0)
 
 IN vec4 vPosition;
 IN vec4 vColor;
 IN vec4 vNormal;
 
 OUT vec4 color;
+
+uniform int numLlums;
 
 struct MaterialBuffer {
     vec3 ambient;
@@ -34,7 +32,7 @@ struct LightsBuffer {
     float angle;
 };
 
-uniform LightsBuffer bufferLights[MAXLLUM];
+uniform LightsBuffer bufferLights[20];
 
 vec4 calculateL(int);
 vec4 calculateH(vec4);
@@ -49,7 +47,7 @@ void main()
   }
   vec4 L, H, N=vNormal;
   for (int i=0; i<3; i++){
-    for (int j=0; j<MAXLLUM; j++){
+    for (int j=0; j<numLlums; j++){
         L = normalize(calculateL(j));
         H = normalize(calculateH(L));
         c[i] += bufferMat.diffuse[i] * bufferLights[j].diffuse[i] * max(dot(L,N),0.0) +
@@ -62,7 +60,7 @@ void main()
 }
 
 vec4 calculateL(int j){
-    if (bufferLights[j].position == NONE) {
+    if (bufferLights[j].position == vec4(0.0,0.0,0.0,0.0)) {
         return -(bufferLights[j].direction);
     } else if (bufferLights[j].angle == 0.0) {
         return bufferLights[j].position - vPosition;
@@ -72,7 +70,7 @@ vec4 calculateL(int j){
 
         float lightToSurfaceAngle = acos(dot(rayDirection, coneDirection));
         if (lightToSurfaceAngle > bufferLights[j].angle) {
-            return NONE;
+            return vec4(0.0,0.0,0.0,0.0);
         } else {
             return -rayDirection;
         }

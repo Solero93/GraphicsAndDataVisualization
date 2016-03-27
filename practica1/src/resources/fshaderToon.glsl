@@ -1,16 +1,15 @@
 #if __VERSION__<130
 #define IN varying
 #define OUT varying
-#define MAXLLUM 1
 #else
 #define IN in
 #define OUT out
 #endif
 
-#define MAXLLUM 1
-
 IN vec4 norm;
 IN vec4 luces;
+
+uniform int numLlums;
 
 struct LightsBuffer {
     vec4 position;
@@ -21,7 +20,7 @@ struct LightsBuffer {
     float angle;
 };
 
-uniform LightsBuffer bufferLights[MAXLLUM];
+uniform LightsBuffer bufferLights[20];
 
 void main(){
     float intensity;
