@@ -36,47 +36,57 @@ uniform LightsBuffer bufferLights[20];
 
 vec4 calculateL(int);
 vec4 calculateH(vec4);
+float atenuateFactor(int, float, float, float);
 
 void main()
 {
   gl_Position = vPosition;
 
-  float c[3];
-  for (int i=0; i<3; i++){
-      c[i] = 0.0;
-  }
+  vec3 c = vec3(0.0, 0.0, 0.0);
   vec4 L, H, N=vNormal;
-  for (int i=0; i<3; i++){
-    for (int j=0; j<numLlums; j++){
-        L = normalize(calculateL(j));
-        H = normalize(calculateH(L));
-        c[i] += bufferMat.diffuse[i] * bufferLights[j].diffuse[i] * max(dot(L,N),0.0) +
-                bufferMat.specular[i] * bufferLights[j].specular[i] *
-                pow(max(dot(N,H),0.0), bufferMat.shininess) +
-                bufferMat.ambient[i] * bufferLights[j].ambient[i];
-    }
+  vec3 diffuseTmp, specularTmp, ambientTmp;
+  float atenuation;
+  for (int j=0; j<numLlums; j++){
+      L = normalize(calculateL(j));
+      H = normalize(calculateH(L));
+
+      diffuseTmp = bufferMat.diffuse * bufferLights[j].diffuse * max(dot(L,N),0.0);
+      specularTmp = bufferMat.specular * bufferLights[j].specular * pow(max(dot(N,H),0.0), bufferMat.shininess);
+      ambientTmp = bufferMat.ambient * bufferLights[j].ambient;
+
+      atenuation = atenuateFactor(j, 0.0, 0.0, 1.0);
+
+      c += diffuseTmp * atenuation + specularTmp * atenuation + ambientTmp;
   }
   color = vec4(c[0],c[1],c[2],1.0);
 }
 
+
 vec4 calculateL(int j){
-    if (bufferLights[j].position == vec4(0.0,0.0,0.0,0.0)) {
+    if (bufferLights[j].position == vec4(0.0, 0.0, 0.0, 0.0)) {
         return -(bufferLights[j].direction);
     } else if (bufferLights[j].angle == 0.0) {
-        return bufferLights[j].position - vPosition;
+        return bufferLights[j].position - gl_Position;
     } else {
-        vec4 rayDirection = normalize(vPosition - bufferLights[j].position);
+        vec4 rayDirection = normalize(gl_Position - bufferLights[j].position);
         vec4 coneDirection = normalize(bufferLights[j].direction);
 
         float lightToSurfaceAngle = acos(dot(rayDirection, coneDirection));
         if (lightToSurfaceAngle > bufferLights[j].angle) {
-            return vec4(0.0,0.0,0.0,0.0);
+            return vec4(0.0, 0.0, 0.0, 0.0);
         } else {
             return -rayDirection;
         }
     }
 }
+
 vec4 calculateH(vec4 L){
     vec4 F = vec4(0.0, 0.0, 10.0, 1.0); // Focus de l'observador
-    return L + (F - vPosition);
+    return L + (F - gl_Position);
+}
+
+float atenuateFactor(int j, float a, float b, float c){
+    vec4 rayDirection = bufferLights[j].position - gl_Position;
+    float d = length(rayDirection);
+    return 1.0/(a + b*d + c*d*d);
 }

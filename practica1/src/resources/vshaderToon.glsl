@@ -12,7 +12,8 @@ IN vec4 vNormal;
 
 OUT vec4 norm;
 
-void main(){
+void main()
+{
   gl_Position = vPosition;
   norm = vNormal;
 }

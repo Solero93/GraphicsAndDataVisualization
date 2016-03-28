@@ -2,10 +2,10 @@
 
 Material::Material() {
     //yellow rubber
-    ambient = vec3(0.05,0.05,0.0);
-    diffuse = vec3(0.5,0.5,0.4);
-    specular = vec3(0.7,0.7,0.04);
-    shininess = 0.078125;
+    ambient = vec3(0.2,0.2,0.2);
+    diffuse = vec3(0.8,0.0,0.0);
+    specular = vec3(1.0,1.0,1.0);
+    shininess = 20;
 }
 
 void Material::toGPU(QGLShaderProgram *pr) {

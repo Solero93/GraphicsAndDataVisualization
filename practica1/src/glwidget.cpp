@@ -149,14 +149,14 @@ void GLWidget::initializeGL() {
     //glEnable(GL_NORMALIZE);
 
     //initShadersGPU();
-    //activaGouraudShader();
-    activaToonShader();
+    activaGouraudShader();
+    //activaToonShader();
     //activaPhongShader();
 
     // Creacio d'una llum per apoder modificar el seus valors amb la interficie
 
-    //mon->addLlum(new Llum(Puntual));
-    mon->addLlum(new Llum(Direccional));
+    mon->addLlum(new Llum(Puntual));
+    //mon->addLlum(new Llum(Direccional));
     //mon->addLlum(new Llum(SpotLight));
 
     mon->llumsToGPU(program);

@@ -7,11 +7,11 @@ Llum::Llum(Lights t) {
 void Llum::setTipusLlum(Lights t) {
     switch(t) {
     case Puntual:
-        this->position = vec4(0.0,1.0,0.0,1.0);
+        this->position = vec4(2.0,2.0,2.0,1.0);
         this->direction = NONE;
-        this->ambient = vec3(0.5,0.5,0.5);
-        this->diffuse = vec3(0.5,0.5,0.5);
-        this->specular = vec3(0.5,0.5,0.5);
+        this->ambient = vec3(0.2,0.2,0.2);
+        this->diffuse = vec3(0.8,0.8,0.8);
+        this->specular = vec3(1.0,1.0,1.0);
         this->angle = 0.0;
         break;
     case Direccional:

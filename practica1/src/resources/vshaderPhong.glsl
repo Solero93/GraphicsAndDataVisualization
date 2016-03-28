@@ -10,10 +10,12 @@ IN vec4 vPosition;
 IN vec4 vColor;
 IN vec4 vNormal;
 
+OUT vec4 pos;
 OUT vec4 norm;
 
 void main()
 {
     gl_Position = vPosition;
+    pos = vPosition;
     norm = vNormal;
 }
