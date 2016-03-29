@@ -31,27 +31,32 @@ struct MaterialBuffer {
 
 uniform MaterialBuffer bufferMat;
 
-vec4 calculateV(void);
+vec4 calculateL(void);
 
 void main(){
     vec4 colorv2, focus = vec4(0.0, 0.0, 10.0, 1.0);
-    vec4 silhuette = vec4(bufferMat.diffuse[0],bufferMat.diffuse[1],bufferMat.diffuse[2],1.0);
-    float intensity = dot(normalize(calculateV()),normalize(norm));
-    float atenuation = 1.0 - dot(normalize(focus - pos), normalize(norm));
+    float normalVisionAngleCos = dot(normalize(focus - pos), normalize(norm));
 
-    if (intensity > 0.95) {
-        colorv2 = vec4(1.0,0.5,0.5,1.0);
-    } else if (intensity > 0.65) {
-        colorv2 = vec4(0.6,0.3,0.3,1.0);
-    } else if (intensity > 0.25) {
-        colorv2 = vec4(0.4,0.2,0.2,1.0);
+    if (normalVisionAngleCos == 0.0){
+        vec4 silhouette = vec4(bufferMat.diffuse[0],bufferMat.diffuse[1],bufferMat.diffuse[2],1.0);
+        colorv2 = silhouette * (1.0 - normalVisionAngleCos);
     } else {
-        colorv2 = vec4(0.2,0.1,0.1,1.0);
+        float intensity = dot(normalize(calculateL()),normalize(norm));
+        if (intensity > 0.95) {
+            colorv2 = vec4(1.0,0.5,0.5,1.0);
+        } else if (intensity > 0.65) {
+            colorv2 = vec4(0.6,0.3,0.3,1.0);
+        } else if (intensity > 0.25) {
+            colorv2 = vec4(0.4,0.2,0.2,1.0);
+        } else {
+            colorv2 = vec4(0.2,0.1,0.1,1.0);
+        }
     }
-    gl_FragColor =  silhuette * atenuation + colorv2;
+
+    gl_FragColor =  colorv2;
 }
 
-vec4 calculateV(){
+vec4 calculateL(){
     vec3 noColor = vec3(0.0, 0.0, 0.0);
     vec4 noVector = vec4(0.0, 0.0, 0.0, 0.0);
     for (int i=0; i<numLlums; i++){
