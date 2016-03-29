@@ -13,7 +13,7 @@ Objecte::Objecte(int npoints, QString n) : numPoints(npoints){
     normals = new vec4[numPoints];
     readObj(n);
     material = new Material();
-    make(); // TODO falta un new Material y quitar make()
+    make();
 }
 
 

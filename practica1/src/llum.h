@@ -1,7 +1,8 @@
 #ifndef LLUM_H
 #define LLUM_H
 
-#define NONE vec4(0.0,0.0,0.0,0.0)
+#define NO_VECTOR vec4(0.0,0.0,0.0,0.0)
+#define NO_COLOR vec3(0.0,0.0,0.0)
 
 #include <Common.h>
 

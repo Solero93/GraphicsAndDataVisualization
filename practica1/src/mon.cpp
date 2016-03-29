@@ -35,7 +35,7 @@ void Mon::llumsToGPU(QGLShaderProgram *pr){
         GLuint angle;
     };
 
-    gl_idBuffer gl_buffer[MAXLLUM];
+    gl_idBuffer gl_buffer[llums.size()];
 
     for (int i=0; i<this->llums.size(); i++){
         gl_buffer[i].position = pr->uniformLocation(QString("bufferLights[%1].position").arg(i));
@@ -57,7 +57,6 @@ void Mon::llumsToGPU(QGLShaderProgram *pr){
     GLuint numLlums = pr->uniformLocation("numLlums");
     glUniform1i(numLlums, this->llums.size());
 }
-
 
 void Mon::addLlum(Llum *l) {
     llums.push_back(l);

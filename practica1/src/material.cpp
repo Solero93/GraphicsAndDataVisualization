@@ -1,9 +1,8 @@
 #include "material.h"
 
 Material::Material() {
-    //yellow rubber
-    ambient = vec3(0.2,0.2,0.2);
-    diffuse = vec3(0.8,0.0,0.0);
+    ambient = vec3(0.8,0.2,0.2);
+    diffuse = vec3(0.8,0.2,0.2);
     specular = vec3(1.0,1.0,1.0);
     shininess = 20;
 }

@@ -54,7 +54,7 @@ void main()
       specularTmp = bufferMat.specular * bufferLights[j].specular * pow(max(dot(N,H),0.0), bufferMat.shininess);
       ambientTmp = bufferMat.ambient * bufferLights[j].ambient;
 
-      atenuation = atenuateFactor(j, 0.0, 0.0, 1.0);
+      atenuation = atenuateFactor(j, 0.0, 0.0, 0.2);
 
       c += (diffuseTmp + specularTmp + ambientTmp) * atenuation;
   }

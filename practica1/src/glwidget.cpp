@@ -167,7 +167,7 @@ void GLWidget::initializeGL() {
     //activaToonShader();
     //activaPhongShader();
 
-    // Creacio d'una llum per apoder modificar el seus valors amb la interficie
+    // Creacio d'una llum per a poder modificar el seus valors amb la interficie
 
     mon->addLlum(new Llum(Puntual));
     //mon->addLlum(new Llum(Direccional));
