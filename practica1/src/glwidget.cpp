@@ -71,6 +71,8 @@ void GLWidget::updateXPositionLight(int xposition) {
     vec4 v = mon->getLlumActual()->getPosition();
     v[0] = (float)xposition;
     mon->getLlumActual()->setPosition(v);
+    mon->llumsToGPU(program);
+    updateGL();
 }
 
 void GLWidget::updateYPositionLight(int yposition) {
@@ -78,6 +80,8 @@ void GLWidget::updateYPositionLight(int yposition) {
     vec4 v = mon->getLlumActual()->getPosition();
     v[1] = (float)yposition;
     mon->getLlumActual()->setPosition(v);
+    mon->llumsToGPU(program);
+    updateGL();
 }
 
 void GLWidget::updateZPositionLight(int zposition) {
@@ -85,6 +89,8 @@ void GLWidget::updateZPositionLight(int zposition) {
     vec4 v = mon->getLlumActual()->getPosition();
     v[2] = (float)zposition;
     mon->getLlumActual()->setPosition(v);
+    mon->llumsToGPU(program);
+    updateGL();
 }
 
 void GLWidget::updateLightIntensity(int intens) {
@@ -94,12 +100,16 @@ void GLWidget::updateLightIntensity(int intens) {
     intensitat[0] = intens/200.0;
     intensitat[1] = intens/200.0;
     intensitat[2] = intens/200.0; // el 200 es l'escala del scrollbar
+    mon->getLlumActual()->setDiffuse(intensitat);
+    mon->llumsToGPU(program);
+    updateGL();
 
-     mon->getLlumActual()->setDiffuse(intensitat);
 }
 
 void GLWidget::activateLight(){
     mon->getLlumActual()->switchOnOff();
+    mon->llumsToGPU(program);
+    updateGL();
 }
 
 void GLWidget::activaBumpMapping() {
@@ -260,7 +270,7 @@ void GLWidget::showAuxWindowPuntualLight(Llum *light)
     // X slider
     QSlider* XSlider = new QSlider(Qt::Horizontal);
     XSlider->setTickPosition(QSlider::TicksBelow);
-    XSlider->setMinimum(0);
+    XSlider->setMinimum(-200);
     XSlider->setMaximum(200);
     if (light == NULL)
         XSlider->setSliderPosition(100);
@@ -280,7 +290,7 @@ void GLWidget::showAuxWindowPuntualLight(Llum *light)
     // Y slider
     QSlider* YSlider = new QSlider(Qt::Horizontal);
     YSlider->setTickPosition(QSlider::TicksBelow);
-    YSlider->setMinimum(0);
+    YSlider->setMinimum(-200);
     YSlider->setMaximum(200);
     if (light == NULL)
         YSlider->setSliderPosition(100);
@@ -301,7 +311,7 @@ void GLWidget::showAuxWindowPuntualLight(Llum *light)
     // Z Slider
     QSlider* ZSlider = new QSlider(Qt::Horizontal);
     ZSlider->setTickPosition(QSlider::TicksBelow);
-    ZSlider->setMinimum(0);
+    ZSlider->setMinimum(-200);
     ZSlider->setMaximum(200);
     if (light == NULL)
         ZSlider->setSliderPosition(100);

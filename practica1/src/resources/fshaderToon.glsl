@@ -21,6 +21,15 @@ struct LightsBuffer {
 
 uniform LightsBuffer bufferLights[20];
 
+struct MaterialBuffer {
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float shininess;
+};
+
+uniform MaterialBuffer bufferMat;
+
 void main(){
     float intensity;
     vec4 colorv2;

@@ -18,6 +18,7 @@ void Mon::draw() {
     }
 }
 
+
 Llum* Mon::getLlumActual() {
     // Ara per ara dona com a llum actual la darrera que s'ha inserit, però es podria canviar segons el
     // que es vulgui fer en la GUI
@@ -56,6 +57,7 @@ void Mon::llumsToGPU(QGLShaderProgram *pr){
     GLuint numLlums = pr->uniformLocation("numLlums");
     glUniform1i(numLlums, this->llums.size());
 }
+
 
 void Mon::addLlum(Llum *l) {
     llums.push_back(l);
