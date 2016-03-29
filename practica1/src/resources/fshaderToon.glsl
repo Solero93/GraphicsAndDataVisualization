@@ -58,11 +58,21 @@ vec4 calculateV(){
         // Check which light is turnt on
         if (bufferLights[i].ambient != noColor ||
                 bufferLights[i].diffuse != noColor ||
-                bufferLights[i].specular != noColor){
-            if (bufferLights[i].direction == noVector) {
+                bufferLights[i].specular != noColor) {
+            if (bufferLights[i].position == noVector) {
+                return -bufferLights[i].direction;
+            } else if(bufferLights[i].angle == 0.0) {
                 return bufferLights[i].position - pos;
             } else {
-                return -bufferLights[i].direction;
+                vec4 rayDirection = normalize(pos - bufferLights[i].position);
+                vec4 coneDirection = normalize(bufferLights[i].direction);
+
+                float lightToSurfaceAngle = acos(dot(rayDirection, coneDirection));
+                if (lightToSurfaceAngle > bufferLights[i].angle) {
+                    return noVector;
+                } else {
+                    return -rayDirection;
+                }
             }
         }
     }

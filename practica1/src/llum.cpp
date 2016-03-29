@@ -28,7 +28,7 @@ void Llum::setTipusLlum(Lights t) {
         this->ambient = vec3(0.2,0.2,0.2);
         this->diffuse = vec3(0.5,0.5,0.5);
         this->specular = vec3(0.5,0.5,0.5);
-        this->angle = 0.05f;
+        this->angle = 1.0f;
         break;
     }
     this->isActive = true;
