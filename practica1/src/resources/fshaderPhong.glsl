@@ -51,7 +51,7 @@ void main()
 
         atenuation = atenuateFactor(j, 0.0, 0.0, 1.0);
 
-        c += diffuseTmp * atenuation + specularTmp * atenuation + ambientTmp;
+        c += (diffuseTmp + specularTmp + ambientTmp) * atenuation;
     }
     gl_FragColor = vec4(c[0],c[1],c[2],1.0);
   }
