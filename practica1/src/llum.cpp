@@ -23,12 +23,12 @@ void Llum::setTipusLlum(Lights t) {
         this->angle = 0.0;
         break;
     case SpotLight:
-        this->position = vec4(0.0, -1.0, 0.0, 1.0);
+        this->position = vec4(1.0, 1.0, 0.0, 1.0);
         this->direction = vec4(0.0, 1.0, 0.0, 0.0);
         this->ambient = vec3(0.2,0.2,0.2);
         this->diffuse = vec3(0.5,0.5,0.5);
         this->specular = vec3(0.5,0.5,0.5);
-        this->angle = 0.05f;
+        this->angle = 0.15f;
         break;
     }
     this->isActive = true;

@@ -54,17 +54,21 @@ void GLWidget::ensenyaMenuLlum0() {
 void GLWidget::changePositionLight() {
     // tipus rep el tipus de llum que es vol afegir. Des d'aqui s'afegeix la llum al mon.
     mon->getLlumActual()->setTipusLlum(Puntual);
+    mon->llumsToGPU(program);
+    updateGL();
 
 }
 void GLWidget::changeDirectionalLight() {
     // tipus rep el tipus de llum que es vol afegir. Des d'aqui s'afegeix la llum al mon.
    mon->getLlumActual()->setTipusLlum(Direccional);
-
+   mon->llumsToGPU(program);
+   updateGL();
 }
 void GLWidget::changeSpotLight() {
     // tipus rep el tipus de llum que es vol afegir. Des d'aqui s'afegeix la llum al mon.
     mon->getLlumActual()->setTipusLlum(SpotLight);
-
+    mon->llumsToGPU(program);
+    updateGL();
 }
 void GLWidget::updateXPositionLight(int xposition) {
     // S'ha de modificar la posicio x de la llum activa
