@@ -49,7 +49,7 @@ void main()
         specularTmp = bufferMat.specular * bufferLights[j].specular * pow(max(dot(N,H),0.0), bufferMat.shininess);
         ambientTmp = bufferMat.ambient * bufferLights[j].ambient;
 
-        atenuation = atenuateFactor(j, 0.0, 0.0, 1.0);
+        atenuation = atenuateFactor(j, 1.0, 0.0, 0.0);
 
         c += (diffuseTmp + specularTmp + ambientTmp) * atenuation;
     }
@@ -76,7 +76,8 @@ vec4 calculateL(int j){
 
 vec4 calculateH(vec4 L){
     vec4 F = vec4(0.0, 0.0, 10.0, 1.0); // Focus de l'observador
-    return L + (F - pos);
+    vec4 V = normalize(F - pos);
+    return L + V;
 }
 
 float atenuateFactor(int j, float a, float b, float c){

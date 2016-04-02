@@ -16,10 +16,10 @@ void Llum::setTipusLlum(Lights t) {
         break;
     case Direccional:
         this->position = NO_VECTOR;
-        this->direction = vec4(1.0,1.0,0.0,0.0);
+        this->direction = -vec4(2.0,2.0,2.0,0.0);
         this->ambient = vec3(0.2,0.2,0.2);
-        this->diffuse = vec3(0.5,0.5,0.5);
-        this->specular = vec3(0.5,0.5,0.5);
+        this->diffuse = vec3(0.8,0.8,0.8);
+        this->specular = vec3(1.0,1.0,1.0);
         this->angle = 0.0;
         break;
     case SpotLight:

@@ -1,10 +1,10 @@
 #include "material.h"
 
 Material::Material() {
-    ambient = vec3(0.8,0.2,0.2);
-    diffuse = vec3(0.8,0.2,0.2);
+    ambient = vec3(0.2,0.2,0.2);
+    diffuse = vec3(0.8,0.0,0.0);
     specular = vec3(1.0,1.0,1.0);
-    shininess = 20;
+    shininess = 20.0;
 }
 
 void Material::toGPU(QGLShaderProgram *pr) {
