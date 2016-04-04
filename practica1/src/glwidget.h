@@ -45,6 +45,21 @@ public slots:
     void updateZPositionLight(int zposition);
     void updateLightIntensity(int intensity);
     void showAuxWindowPuntualLight(Llum *light);
+    void keyPressEvent(QKeyEvent *event);
+
+
+
+    //extensión de rotacicon con teclado
+public slots:
+    void setXRotation(int angle);
+    void setYRotation(int angle);
+    void setZRotation(int angle);
+
+signals:
+    void xRotationChanged(int angle);
+    void yRotationChanged(int angle);
+    void zRotationChanged(int angle);
+
 
 protected:
     void initializeGL();
@@ -55,6 +70,11 @@ private:
     QWidget* auxWidget; // window for parameters
 
     Mon *mon;
+
+    //extension de rotacion con teclado
+    int xRot;
+    int yRot;
+    int zRot;
 
     QGLShaderProgram *program;
 
