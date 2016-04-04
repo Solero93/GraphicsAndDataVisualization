@@ -66,18 +66,25 @@ void GLWidget::setZRotation(int angle)
  {
      if (event->key() == Qt::Key_Up)
      {
-     cout << "clavier" << endl;
      setYRotation(yRot + 8);
-     cout << yRot << endl;
+     }
+     else if(event->key() == Qt::Key_Down)
+     {
+     setYRotation(yRot - 8);
+     }
+     else if(event->key() == Qt::Key_Left)
+     {
+     setYRotation(xRot + 8);
+     }
+     else if(event->key() == Qt::Key_Right)
+     {
+     setYRotation(xRot - 8);
      }
      else
      {
      }
 
  }
-
-
-
 
 
 // Metodes que es criden des dels menús
@@ -204,6 +211,9 @@ void GLWidget::InitShader(const char* vShaderFile, const char* fShaderFile){
     program->bind();
     mon->llumsToGPU(program);
     mon->setAmbientToGPU(program);
+    for (int i=0; i<mon->elements.size(); i++){
+        mon->elements[i]->toGPU(program);
+    }
 }
 
 /**
@@ -229,8 +239,8 @@ void GLWidget::initializeGL() {
     //Added GL_NMORMALIZE
     //glEnable(GL_NORMALIZE);
 
-    //initShadersGPU();
-    activaGouraudShader();
+    initShadersGPU();
+    //activaGouraudShader();
     //activaToonShader();
     //activaPhongShader();
 
