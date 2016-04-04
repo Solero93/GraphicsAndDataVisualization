@@ -137,6 +137,7 @@ void GLWidget::InitShader(const char* vShaderFile, const char* fShaderFile){
     program->link();
     program->bind();
     mon->llumsToGPU(program);
+    mon->setAmbientToGPU(program);
 }
 
 /**

@@ -34,9 +34,11 @@ public:
     void addLlum(Llum *l);
     Llum *getLlumActual();
     void llumsToGPU(QGLShaderProgram *program);
+    void setAmbientToGPU(QGLShaderProgram *program);
 
     vector<Objecte*> elements;
     vector<Llum*> llums;
+    vec3 llumAmbient;
 
 };
 

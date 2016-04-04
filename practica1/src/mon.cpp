@@ -1,6 +1,7 @@
 #include "mon.h"
 
 Mon::Mon() {
+    this->llumAmbient = vec3(0.05,0.05,0.05);
 }
 
 Mon::~Mon() {
@@ -56,6 +57,11 @@ void Mon::llumsToGPU(QGLShaderProgram *pr){
     }
     GLuint numLlums = pr->uniformLocation("numLlums");
     glUniform1i(numLlums, this->llums.size());
+}
+
+void Mon::setAmbientToGPU(QGLShaderProgram *program){
+    GLuint llumAmbient = program->uniformLocation("llumAmbient");
+    glUniform3fv(llumAmbient,1,this->llumAmbient);
 }
 
 void Mon::addLlum(Llum *l) {

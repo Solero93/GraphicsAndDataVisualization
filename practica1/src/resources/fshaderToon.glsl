@@ -9,6 +9,7 @@
 IN vec4 pos;
 IN vec4 norm;
 
+uniform vec3 llumAmbient;
 uniform int numLlums;
 
 struct LightsBuffer {
@@ -36,24 +37,19 @@ vec4 calculateL(int);
 void main(){
     vec4 colorv2, focus = vec4(0.0, 0.0, 10.0, 1.0);
     float normalVisionAngleCos = dot(normalize(focus - pos), normalize(norm));
-
-    /*if (normalVisionAngleCos == 0.0){
-        vec4 silhouette = vec4(bufferMat.diffuse[0],bufferMat.diffuse[1],bufferMat.diffuse[2],1.0);
-        colorv2 = silhouette * (1.0 - normalVisionAngleCos);
-    } else {*/
-        float intensity = dot(normalize(calculateL(0)),normalize(norm));
-        if (intensity > 0.95) {
-            colorv2 = vec4(1.0,0.5,0.5,1.0);
-        } else if (intensity > 0.65) {
-            colorv2 = vec4(0.6,0.3,0.3,1.0);
-        } else if (intensity > 0.25) {
-            colorv2 = vec4(0.4,0.2,0.2,1.0);
-        } else {
-            colorv2 = vec4(0.2,0.1,0.1,1.0);
-        }
-    //}
-
-    gl_FragColor =  colorv2;
+    float intensity = dot(normalize(calculateL(0)),normalize(norm));
+    if (intensity > 0.95) {
+        colorv2 = vec4(1.0,0.5,0.5,1.0);
+    } else if (intensity > 0.65) {
+        colorv2 = vec4(0.6,0.3,0.3,1.0);
+    } else if (intensity > 0.25) {
+        colorv2 = vec4(0.4,0.2,0.2,1.0);
+    } else {
+        colorv2 = vec4(0.2,0.1,0.1,1.0);
+    }
+    vec4 ambient = vec4(llumAmbient[0],llumAmbient[1],llumAmbient[2],0.0);
+    vec4 silhuetteColor = colorv2 * (1.0 - normalVisionAngleCos);
+    gl_FragColor =  colorv2 * (1.0 - normalVisionAngleCos) + ambient;
 }
 
 vec4 calculateL(int i){
