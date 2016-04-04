@@ -47,9 +47,8 @@ void main(){
     } else {
         colorv2 = vec4(0.2,0.1,0.1,1.0);
     }
-    vec3 tmp = llumAmbient * bufferMat.diffuse;
-    vec4 ambient = vec4(tmp[0], tmp[1],tmp[2],0.0) ;
-    vec4 silhuetteColor = colorv2 * (1.0 - normalVisionAngleCos);
+    vec3 tmpAmbient = llumAmbient * bufferMat.diffuse;
+    vec4 ambient = vec4(tmpAmbient[0], tmpAmbient[1], tmpAmbient[2], 0.0);
     gl_FragColor =  colorv2 * (1.0 - normalVisionAngleCos) + ambient;
 }
 

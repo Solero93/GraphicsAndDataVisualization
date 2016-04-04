@@ -34,6 +34,7 @@ void Mon::llumsToGPU(QGLShaderProgram *pr){
         GLuint diffuse;
         GLuint specular;
         GLuint angle;
+        GLuint atenuate;
     };
 
     gl_idBuffer gl_buffer[llums.size()];
@@ -45,6 +46,7 @@ void Mon::llumsToGPU(QGLShaderProgram *pr){
         gl_buffer[i].diffuse = pr->uniformLocation(QString("bufferLights[%1].diffuse").arg(i));
         gl_buffer[i].specular = pr->uniformLocation(QString("bufferLights[%1].specular").arg(i));
         gl_buffer[i].angle = pr->uniformLocation(QString("bufferLights[%1].angle").arg(i));
+        gl_buffer[i].atenuate = pr->uniformLocation(QString("bufferLights[%1].atenuate").arg(i));
 
         glUniform4fv(gl_buffer[i].position,1,this->llums[i]->getPosition());
         glUniform4fv(gl_buffer[i].direction,1,this->llums[i]->getDirection());
@@ -52,6 +54,7 @@ void Mon::llumsToGPU(QGLShaderProgram *pr){
         glUniform3fv(gl_buffer[i].diffuse,1,this->llums[i]->getDiffuse());
         glUniform3fv(gl_buffer[i].specular,1,this->llums[i]->getSpecular());
         glUniform1f(gl_buffer[i].angle,this->llums[i]->getAngle());
+        glUniform3fv(gl_buffer[i].atenuate,1,this->llums[i]->getAtenuate());
 
         this->llums[i]->id = i;
     }
