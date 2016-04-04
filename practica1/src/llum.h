@@ -19,6 +19,7 @@ class Llum {
         vec3 diffuse;
         vec3 specular;
         float angle;
+        vec3 atenuate;
         bool isActive;
 
         Llum(Lights l);
@@ -29,6 +30,7 @@ class Llum {
         vec3 getDiffuse();
         vec3 getSpecular();
         float getAngle();
+        vec3 getAtenuate();
 
         void setPosition(vec4 v);
         void setDirection(vec4 v);
@@ -36,6 +38,7 @@ class Llum {
         void setDiffuse(vec3 i);
         void setSpecular(vec3 i);
         void setAngle(float a);
+        void setAtenuate(vec3 at);
         void switchOnOff();
 };
 

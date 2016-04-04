@@ -25,6 +25,7 @@ struct LightsBuffer {
     vec3 diffuse;
     vec3 specular;
     float angle;
+    vec3 atenuate;
 };
 
 uniform LightsBuffer bufferLights[20];
@@ -34,7 +35,7 @@ IN vec4 norm;
 
 vec4 calculateL(int);
 vec4 calculateH(vec4);
-float atenuateFactor(int,float,float,float);
+float atenuateFactor(int,vec3);
 
 void main()
 {
@@ -50,7 +51,7 @@ void main()
         specularTmp = bufferMat.specular * bufferLights[j].specular * pow(max(dot(N,H),0.0), bufferMat.shininess);
         ambientTmp = bufferMat.ambient * bufferLights[j].ambient;
 
-        atenuation = atenuateFactor(j, 1.0, 0.0, 0.0);
+        atenuation = atenuateFactor(j, bufferLights[j].atenuate);
 
         c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * bufferMat.diffuse;
     }
@@ -81,8 +82,9 @@ vec4 calculateH(vec4 L){
     return L + V;
 }
 
-float atenuateFactor(int j, float a, float b, float c){
+float atenuateFactor(int j, vec3 atenuate){
     vec4 rayDirection = bufferLights[j].position - pos;
+    float a = atenuate[0], b = atenuate[1], c = atenuate[2];
     float d = length(rayDirection);
     return 1.0/(a + b*d + c*d*d);
 }
