@@ -35,21 +35,23 @@ uniform MaterialBuffer bufferMat;
 vec4 calculateL(int);
 
 void main(){
-    vec4 colorv2, focus = vec4(0.0, 0.0, 10.0, 1.0);
+    vec4 focus = vec4(0.0, 0.0, 10.0, 1.0);
+    vec3 colorv2;
     float normalVisionAngleCos = dot(normalize(focus - pos), normalize(norm));
     float intensity = dot(normalize(calculateL(0)),normalize(norm));
+
     if (intensity > 0.95) {
-        colorv2 = vec4(1.0,0.5,0.5,1.0);
+        colorv2 = vec3(1.0,0.5,0.5);
     } else if (intensity > 0.65) {
-        colorv2 = vec4(0.6,0.3,0.3,1.0);
+        colorv2 = vec3(0.6,0.3,0.3);
     } else if (intensity > 0.25) {
-        colorv2 = vec4(0.4,0.2,0.2,1.0);
+        colorv2 = vec3(0.4,0.2,0.2);
     } else {
-        colorv2 = vec4(0.2,0.1,0.1,1.0);
+        colorv2 = vec3(0.2,0.1,0.1);
     }
-    vec3 tmpAmbient = llumAmbient * bufferMat.diffuse;
-    vec4 ambient = vec4(tmpAmbient[0], tmpAmbient[1], tmpAmbient[2], 0.0);
-    gl_FragColor =  colorv2 * (1.0 - normalVisionAngleCos) + ambient;
+    vec3 ambient = llumAmbient * bufferMat.diffuse;
+    vec3 colorFinal = colorv2 * (1.0 - normalVisionAngleCos) + ambient;
+    gl_FragColor = vec4(colorFinal[0], colorFinal[1], colorFinal[2], 1.0);
 }
 
 vec4 calculateL(int i){
