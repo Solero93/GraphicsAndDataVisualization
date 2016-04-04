@@ -6,6 +6,11 @@
 
 GLWidget::GLWidget(QWidget *parent) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent) {
     setFocusPolicy( Qt::StrongFocus );
+
+    xRot = 0;
+    yRot = 0;
+    zRot = 0;
+
     mon = new Mon();
 }
 
@@ -13,6 +18,67 @@ GLWidget::~GLWidget() {
     makeCurrent();
     delete mon;
 }
+
+//metodes extensio rotacio amb teclat
+
+static void qNormalizeAngle(int &angle)
+{
+    while (angle < 0)
+        angle += 360 * 16;
+    while (angle > 360 * 16)
+        angle -= 360 * 16;
+}
+
+
+void GLWidget::setXRotation(int angle)
+{
+    qNormalizeAngle(angle);
+    if (angle != xRot) {
+        xRot = angle;
+        emit xRotationChanged(angle);
+        updateGL();
+    }
+}
+
+
+void GLWidget::setYRotation(int angle)
+{
+    qNormalizeAngle(angle);
+    if (angle != yRot) {
+        yRot = angle;
+        emit yRotationChanged(angle);
+        updateGL();
+    }
+}
+
+void GLWidget::setZRotation(int angle)
+{
+    qNormalizeAngle(angle);
+    if (angle != zRot) {
+        zRot = angle;
+        emit zRotationChanged(angle);
+        updateGL();
+    }
+}
+
+
+ void GLWidget:: keyPressEvent(QKeyEvent *event)
+ {
+     if (event->key() == Qt::Key_Up)
+     {
+     cout << "clavier" << endl;
+     setYRotation(yRot + 8);
+     cout << yRot << endl;
+     }
+     else
+     {
+     }
+
+ }
+
+
+
+
 
 // Metodes que es criden des dels menús
 
