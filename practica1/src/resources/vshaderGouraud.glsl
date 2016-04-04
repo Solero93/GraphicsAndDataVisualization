@@ -57,7 +57,7 @@ void main()
 
       atenuation = atenuateFactor(j, 1.0, 0.0, 0.0);
 
-      c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient;
+      c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * bufferMat.diffuse;
   }
   color = vec4(c[0],c[1],c[2],1.0);
 }
