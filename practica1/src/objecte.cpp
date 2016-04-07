@@ -5,6 +5,7 @@ Objecte::Objecte(int npoints, QObject *parent) : numPoints(npoints) ,QObject(par
     points = new point4[numPoints];
     colors = new point4[numPoints];
     normals = new vec4[numPoints];
+    temporal = vec3(0.0,0.0,0.0);
 }
 
 Objecte::Objecte(int npoints, QString n) : numPoints(npoints){
@@ -13,6 +14,17 @@ Objecte::Objecte(int npoints, QString n) : numPoints(npoints){
     normals = new vec4[numPoints];
     readObj(n);
     material = new Material();
+    make();
+}
+
+Objecte::Objecte(int npoints, QString n, QString m) : numPoints(npoints){
+    points = new point4[numPoints];
+    colors = new point4[numPoints];
+    normals = new vec4[numPoints];
+    readObj(n);
+    material = new Material();
+    qDebug() << "abc" << n << "def";
+    readMat(m);
     make();
 }
 
@@ -180,6 +192,8 @@ void Objecte::readObj(QString filename){
 
 }
 
+
+
 void Objecte::construeix_cara ( char **words, int nwords) {
     Cara face;
 
@@ -209,6 +223,79 @@ void Objecte::construeix_cara ( char **words, int nwords) {
     }
     face.color = vec4(1.0, 0.0, 0.0, 1.0);
     this->cares.push_back(face);
+}
+
+// Llegeix un fitxer .mtl
+//  Si el fitxer referencia fitxers de materials (.mtl), encara no es llegeixen
+//  Tots els elements del fitxer es llegeixen com a un unic objecte.
+void Objecte::readMat(QString filename){
+
+    FILE *fp = fopen(filename.toLocal8Bit(),"rb");
+    if (!fp)
+    {
+        cout << "No puc obrir el fitxer " << endl;
+    }
+    else {
+
+        while (true)
+        {
+            char *comment_ptr = ReadFile::fetch_line (fp);
+
+            if (comment_ptr == (char *) -1)  /* end-of-file */
+                break;
+
+            /* did we get a comment? */
+            if (comment_ptr) {
+                //make_comment (comment_ptr);
+                continue;
+            }
+
+            /* if we get here, the line was not a comment */
+            int nwords = ReadFile::fetch_words();
+
+            /* skip empty lines */
+            if (nwords == 0)
+                continue;
+
+            char *first_word = ReadFile::words[0];
+
+            if (!strcmp (first_word, "Ka"))
+            {
+                QString sx(ReadFile::words[1]);
+                QString sy(ReadFile::words[2]);
+                QString sz(ReadFile::words[3]);
+                double x = sx.toDouble();
+                double y = sy.toDouble();
+                double z = sz.toDouble();
+                temporal = vec3(x,y,z);
+                material->setAmbient(temporal);
+
+            }
+            else if (!strcmp (first_word, "Kd")) {
+                QString sx(ReadFile::words[1]);
+                QString sy(ReadFile::words[2]);
+                QString sz(ReadFile::words[3]);
+                double x = sx.toDouble();
+                double y = sy.toDouble();
+                double z = sz.toDouble();
+                temporal = vec3(x,y,z);
+                material->setDiffuse(temporal);
+
+            }
+            else if (!strcmp (first_word, "Ks")) {
+                QString sx(ReadFile::words[1]);
+                QString sy(ReadFile::words[2]);
+                QString sz(ReadFile::words[3]);
+                double x = sx.toDouble();
+                double y = sy.toDouble();
+                double z = sz.toDouble();
+                temporal = vec3(x,y,z);
+                material->setDiffuse(temporal);
+            }
+
+        }
+    }
+
 }
 
 vector<vec4> Objecte::calcularNormalVertexs(){

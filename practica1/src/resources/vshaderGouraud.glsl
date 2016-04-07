@@ -42,8 +42,8 @@ float atenuateFactor(int, vec3);
 
 void main()
 {
+  color = vec4(1.0,0.0,0.0,1.0);
   gl_Position = vPosition;
-
   vec3 c = vec3(0.0, 0.0, 0.0);
   vec4 L, H, N=vNormal;
   vec3 diffuseTmp, specularTmp, ambientTmp;

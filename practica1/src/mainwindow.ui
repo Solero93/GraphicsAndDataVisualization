@@ -105,6 +105,19 @@
     <string>Ctrl+F</string>
    </property>
   </action>
+
+<action name="action_obre_fitxer+material">
+   <property name="text">
+    <string>Obre Fitxer+Material</string>
+   </property>
+   <property name="toolTip">
+    <string>1er objecte 2on material</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+
   <action name="action_gouraud_tex">
    <property name="text">
     <string>GouraudTex</string>
