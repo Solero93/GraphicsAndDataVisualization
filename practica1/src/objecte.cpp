@@ -54,16 +54,17 @@ void Objecte::toGPU(QGLShaderProgram *pr) {
 
 void Objecte::initTextura()
  {
+     qDebug() << "Initializing textures...";
      // Carregar la textura
      glActiveTexture(GL_TEXTURE0);
-     texture = new QOpenGLTexture(QImage("://resources/textures/bricks.png"));
+     texture = new QOpenGLTexture(QImage("://resources/textures/earth1.png"));
      texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
      texture->setMagnificationFilter(QOpenGLTexture::Linear);
      texture->bind(0);
-     //glEnable( GL_DEPTH_TEST ); //-> viene de cubGPUTextures
-     //glEnable(GL_TEXTURE_2D); //-> ídem
+     glEnable(GL_DEPTH_TEST ); //-> viene de cubGPUTextures
+     glEnable(GL_TEXTURE_2D); //-> ídem
      //program->bind(); //-> viene de cubGPUTextures
- }
+}
 
 
 /**
@@ -72,7 +73,6 @@ void Objecte::initTextura()
  */
 void Objecte::draw(){
 
-    //TODO También hay que pasar su material a la GPU
     material->toGPU(program);
 
     // S'activa la textura i es passa a la GPU
@@ -117,7 +117,7 @@ void Objecte::make(){
     };
 
     vector<point4> tmpNormals = this->calcularNormalVertexs();
-    vector<vec2> tmpTextures = this->calcularCoordTextures();
+    vector<vec2> tmpTextures = this->calcularCoordTextures(tmpNormals);
 
     Index = 0;
     for(unsigned int i=0; i<cares.size(); i++){
@@ -342,12 +342,40 @@ vector<vec4> Objecte::calcularNormalVertexs(){
     return normals;
 }
 
-vector<vec2> Objecte::calcularCoordTextures() {
+vector<vec2> Objecte::calcularCoordTextures(vector<vec4> normals) {
     vector<vec2> coordTextures(this->numPoints);
     for (int i=0; i<vertexs.size(); i++){
-        float u = 0.5 + atan2(vertexs[i].z, vertexs[i].x)/(2*M_PI);
-        float v = 0.5 - asin(vertexs[i].y)/M_PI;
+        vec4 intersection = this->intersectWithSphere(vertexs[i],normals[i]);
+        if (intersection == vec3(0.0,0.0,0.0)){
+            qDebug() << "ERROR with spherical coordinates";
+        }
+        float u = 0.5 + atan2(intersection.z, intersection.x)/(2*M_PI);
+        float v = 0.5 - asin(intersection.y)/M_PI;
         coordTextures[i] = vec2(u,v);
     }
     return coordTextures;
+}
+
+vec4 Objecte::intersectWithSphere(vec4 point, vec4 normal){
+    vec4 p = point;
+    vec4 u = normal;
+    //Calculated by hand the two intersections of line (defined by normal) with unit sphere
+    if ((dot(u,p)*dot(u,p))-length(p)+1 < 0){
+        //Technically, should never arrive here
+            //It means there's no intersection with sphere
+        return vec4(0.0, 0.0, 0.0, 0.0);
+    }
+
+    float a1 = -(dot(u,p)) + sqrt((dot(u,p)*dot(u,p))-length(p)+1);
+    float a2 = -(dot(u,p)) - sqrt((dot(u,p)*dot(u,p))-length(p)+1);
+
+    vec4 result1 = p + a1*u;
+    vec4 result2 = p + a2*u;
+
+    //We return the intersection that's closest to point
+    if (length(result1-point) < length(result2-point)){
+        return result1;
+    } else {
+        return result2;
+    }
 }

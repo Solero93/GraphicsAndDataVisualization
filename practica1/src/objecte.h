@@ -60,7 +60,8 @@ public:
     virtual void draw();
 
     vector<point4> calcularNormalVertexs();
-    vector<vec2> calcularCoordTextures();
+    vector<vec2> calcularCoordTextures(vector<vec4>);
+    vec4 intersectWithSphere(vec4, vec4);
 
 private:
     void construeix_cara ( char **words, int nwords);

@@ -8,5 +8,6 @@
         <file>resources/vshaderGouraud.glsl</file>
         <file>resources/vshaderPhong.glsl</file>
         <file>resources/vshaderToon.glsl</file>
+        <file>resources/textures/earth1.png</file>
     </qresource>
 </RCC>
