@@ -28,12 +28,15 @@ protected:
     point4 *points;
     point4 *colors;
     vec4 *normals;
+    vec2* vertexsTextura; // coordenades de textura associades a cada vertex
 
     int Index; // index de control del numero de vertexs a posar a la GPU
 
     Material* material;
 
     QGLShaderProgram *program;
+
+    QOpenGLTexture *texture;
 public:
 
     Objecte(const int npoints, QObject *parent = 0);
@@ -44,10 +47,13 @@ public:
 
     virtual void make();
     virtual void toGPU(QGLShaderProgram *p);
+    virtual void initTextura();
+
 
     virtual void draw();
 
     vector<point4> calcularNormalVertexs();
+    vector<vec2> calcularCoordTextures();
 
 private:
     void construeix_cara ( char **words, int nwords);

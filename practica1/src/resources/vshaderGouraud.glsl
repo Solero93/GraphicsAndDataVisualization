@@ -9,11 +9,14 @@
 IN vec4 vPosition;
 IN vec4 vColor;
 IN vec4 vNormal;
+IN vec2 vCoordTextura;
 
+OUT vec2 v_texcoord;
 OUT vec4 color;
 
 uniform vec3 llumAmbient;
 uniform int numLlums;
+uniform sampler2D texMap;
 
 struct MaterialBuffer {
     vec3 ambient;
@@ -60,6 +63,7 @@ void main()
 
       c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * bufferMat.diffuse;
   }
+  v_texcoord = vCoordTextura;
   color = vec4(c[0],c[1],c[2],1.0);
 }
 

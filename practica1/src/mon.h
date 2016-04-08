@@ -39,7 +39,6 @@ public:
     vector<Objecte*> elements;
     vector<Llum*> llums;
     vec3 llumAmbient;
-
 };
 
 #endif // ESCENA_H

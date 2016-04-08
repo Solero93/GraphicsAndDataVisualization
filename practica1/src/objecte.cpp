@@ -5,12 +5,14 @@ Objecte::Objecte(int npoints, QObject *parent) : numPoints(npoints) ,QObject(par
     points = new point4[numPoints];
     colors = new point4[numPoints];
     normals = new vec4[numPoints];
+    vertexsTextura = new vec2[numPoints];
 }
 
 Objecte::Objecte(int npoints, QString n) : numPoints(npoints){
     points = new point4[numPoints];
     colors = new point4[numPoints];
     normals = new vec4[numPoints];
+    vertexsTextura = new vec2[numPoints];
     readObj(n);
     material = new Material();
     make();
@@ -32,11 +34,21 @@ void Objecte::toGPU(QGLShaderProgram *pr) {
     glGenBuffers( 1, &buffer );
     glBindBuffer( GL_ARRAY_BUFFER, buffer );
 
-    glBufferData( GL_ARRAY_BUFFER, sizeof(point4)*Index + sizeof(point4)*Index, NULL, GL_STATIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER, sizeof(point4)*Index * 3 + sizeof(vec2) * Index , NULL, GL_STATIC_DRAW );
     glEnable( GL_DEPTH_TEST );
 //    glEnable( GL_TEXTURE_2D );
 
 }
+
+void Objecte::initTextura()
+ {
+     // Carregar la textura
+     glActiveTexture(GL_TEXTURE0);
+     texture = new QOpenGLTexture(QImage("://resources/textures/bricks.png"));
+     texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+     texture->setMagnificationFilter(QOpenGLTexture::Linear);
+     texture->bind(0);
+ }
 
 
 /**
@@ -48,16 +60,22 @@ void Objecte::draw(){
     //TODO También hay que pasar su material a la GPU
     material->toGPU(program);
 
+    // S'activa la textura i es passa a la GPU
+    texture->bind(0);
+    program->setUniformValue("texMap", 0);
+
     // Aqui es torna a repetir el pas de dades a la GPU per si hi ha més d'un objecte
     glBindBuffer( GL_ARRAY_BUFFER, buffer );
 
     glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof(point4)*Index, &points[0] );
     glBufferSubData( GL_ARRAY_BUFFER, sizeof(point4)*Index, sizeof(point4)*Index, &colors[0] );
-    glBufferSubData( GL_ARRAY_BUFFER, sizeof(point4)*Index, sizeof(point4)*Index, &normals[0] );
+    glBufferSubData( GL_ARRAY_BUFFER, sizeof(point4)*Index*2, sizeof(point4)*Index, &normals[0] );
+    glBufferSubData( GL_ARRAY_BUFFER, sizeof(point4)*Index*3, sizeof(vec2)*Index, &vertexsTextura[0] );
 
     int vertexLocation = program->attributeLocation("vPosition");
     int colorLocation = program->attributeLocation("vColor");
     int normalLocation = program->attributeLocation("vNormal");
+    int coordTextureLocation = program->attributeLocation("vCoordTextura");
 
     program->enableAttributeArray(vertexLocation);
     program->setAttributeBuffer("vPosition", GL_FLOAT, 0, 4);
@@ -66,10 +84,16 @@ void Objecte::draw(){
     program->setAttributeBuffer("vColor", GL_FLOAT, sizeof(point4)*Index, 4);
 
     program->enableAttributeArray(normalLocation);
-    program->setAttributeBuffer("vNormal", GL_FLOAT, sizeof(point4)*Index, 4);
+    program->setAttributeBuffer("vNormal", GL_FLOAT, sizeof(point4)*Index*2, 4);
+
+    program->enableAttributeArray(coordTextureLocation);
+    program->setAttributeBuffer("vCoordTextura", GL_FLOAT, sizeof(point4)*Index*3, 2);
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glDrawArrays( GL_TRIANGLES, 0, Index );
+    //glEnable( GL_DEPTH_TEST ); //-> viene de cubGPUTextures
+    //glEnable(GL_TEXTURE_2D); //-> ídem
+    //program->bind(); //-> viene de cubGPUTextures
 }
 
 void Objecte::make(){
@@ -81,17 +105,19 @@ void Objecte::make(){
     };
 
     vector<point4> tmpNormals = this->calcularNormalVertexs();
+    vector<vec2> tmpTextures = this->calcularCoordTextures();
 
-    //TODO Hacer que el material se aplique en lugar de estos colores aleatorios
     Index = 0;
     for(unsigned int i=0; i<cares.size(); i++){
         for(unsigned int j=0; j<cares[i].idxVertices.size(); j++){
             points[Index] = vertexs[cares[i].idxVertices[j]];
             normals[Index] = tmpNormals[cares[i].idxVertices[j]];
             colors[Index] = vec4(base_colors[j%4], 1.0);
+            vertexsTextura[Index] = tmpTextures[cares[i].idxVertices[j]];
             Index++;
         }
     }
+    this->initTextura();
 }
 
 // Llegeix un fitxer .obj
@@ -229,4 +255,14 @@ vector<vec4> Objecte::calcularNormalVertexs(){
         normals[i] = normalize(normals[i]); // We normalize the vector
     }
     return normals;
+}
+
+vector<vec2> Objecte::calcularCoordTextures() {
+    vector<vec2> coordTextures(this->numPoints);
+    for (int i=0; i<vertexs.size(); i++){
+        float u = 0.5 + atan2(vertexs[i].z, vertexs[i].x)/(2*M_PI);
+        float v = 0.5 - asin(vertexs[i].y)/M_PI;
+        coordTextures[i] = vec2(u,v);
+    }
+    return coordTextures;
 }
