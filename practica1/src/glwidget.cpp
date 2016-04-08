@@ -284,6 +284,15 @@ void GLWidget::newObj(QString fichero){
     updateGL();
 }
 
+void GLWidget::newObjMat(QString fichero,QString fichero2){
+    qDebug() << fichero;
+    Objecte * obj = new Objecte(100000, fichero, fichero2);
+    obj->toGPU(program);
+    mon->addObjecte(obj);
+    updateGL();
+}
+
+
 // Finestra per a introduir una llum puntual o modificar-ne el seu contingut
 void GLWidget::showAuxWindowPuntualLight(Llum *light)
 {

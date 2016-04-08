@@ -22,6 +22,12 @@ public:
     float shininess;
 
     virtual void toGPU(QGLShaderProgram *p);
+    vec3 getAmbient() const;
+    void setAmbient(const vec3 &value);
+    vec3 getDiffuse() const;
+    void setDiffuse(const vec3 &value);
+    vec3 getSpecular() const;
+    void setSpecular(const vec3 &value);
 };
 
 #endif // MATERIAL_H

@@ -30,7 +30,7 @@ private:
 
 public slots:
     void newObjFromFile();
-
+    void newObjMatFromFile();
 };
 
 #endif // MAINWINDOW_H

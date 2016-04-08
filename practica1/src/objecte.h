@@ -37,14 +37,21 @@ protected:
     QGLShaderProgram *program;
 
     QOpenGLTexture *texture;
+
+    //data to make the readobj
+    vec3 temporal;
+
 public:
 
     Objecte(const int npoints, QObject *parent = 0);
     Objecte(const int npoints, QString n);
+    Objecte(const int npoints, QString n, QString m);
     ~Objecte();
 
     virtual void readObj(QString filename);
 
+    //extra 2.4
+    virtual void readMat(QString filename);
     virtual void make();
     virtual void toGPU(QGLShaderProgram *p);
     virtual void initTextura();

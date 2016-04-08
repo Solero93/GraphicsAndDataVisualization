@@ -30,6 +30,7 @@
     <addaction name="action_obre_fitxer"/>
     <addaction name="separator"/>
     <addaction name="action_afegeix_llum_puntual"/>
+    <addaction name="action_obre_fitxer_material"/>
    </widget>
    <widget class="QMenu" name="menuShaders">
     <property name="title">
@@ -105,6 +106,19 @@
     <string>Ctrl+F</string>
    </property>
   </action>
+
+  <action name="action_obre_fitxer_material">
+   <property name="text">
+    <string>Obre Fitxer+Material</string>
+   </property>
+   <property name="toolTip">
+    <string>1er objecte 2on material</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+
   <action name="action_gouraud_tex">
    <property name="text">
     <string>GouraudTex</string>

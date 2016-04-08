@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // connexio dels menus
 
     connect(this->ui->action_obre_fitxer, SIGNAL(triggered()), this, SLOT(newObjFromFile()));
+    connect(this->ui->action_obre_fitxer_material, SIGNAL(triggered()), this, SLOT(newObjMatFromFile()));
     connect(this->ui->action_gouraud, SIGNAL(triggered()), glWidget, SLOT(activaGouraudShader()));
     connect(this->ui->action_phong, SIGNAL(triggered()), glWidget, SLOT(activaPhongShader()));
     connect(this->ui->action_toon, SIGNAL(triggered()), glWidget, SLOT(activaToonShader()));
@@ -43,6 +44,15 @@ void MainWindow::newObjFromFile()
     QString fileName = QFileDialog::getOpenFileName(this);
     if (!fileName.isNull())
         this->glWidget->newObj(fileName);
+
+}
+//AÑADIR MATERIAL
+void MainWindow::newObjMatFromFile()
+{
+    QString fileName = QFileDialog::getOpenFileName(this);
+    QString fileName2 = QFileDialog::getOpenFileName(this);
+    if (!fileName.isNull())
+        this->glWidget->newObjMat(fileName, fileName2);
 
 }
 

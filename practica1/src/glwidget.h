@@ -24,6 +24,7 @@ public:
     QSize sizeHint() const;
 
     void newObj(QString fichero);
+    void newObjMat(QString fichero, QString fichero2);
 public slots:
 
     void activaToonShader();
