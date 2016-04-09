@@ -90,27 +90,33 @@ void GLWidget::setZRotation(int angle)
 // Metodes que es criden des dels menús
 
 void GLWidget::activaToonShader() {
-    //A implementar a la practica 1
-    InitShader("://resources/vshaderToon.glsl", "://resources/fshaderToon.glsl");
+    program = allPrograms[5];
+    program->link();
+    program->bind();
 }
 
 void GLWidget::activaPhongShader() {
-    //A implementar a la practica 1
-    InitShader("://resources/vshaderPhong.glsl", "://resources/fshaderPhong.glsl");
+    program = allPrograms[3];
+    program->link();
+    program->bind();
 }
 
 void GLWidget::activaGouraudShader() {
-    //Added the path to activate the gouraud shader
-    InitShader("://resources/vshaderGouraud.glsl", "://resources/fshaderGouraud.glsl");
+    program = allPrograms[1];
+    program->link();
+    program->bind();
 }
 
 void GLWidget::activaPhongTex() {
-    InitShader("://resources/vshaderPhongTextura.glsl", "://resources/fshaderPhongTextura.glsl");
+    program = allPrograms[4];
+    program->link();
+    program->bind();
 }
 
-
 void GLWidget::activaGouraudTex() {
-    InitShader("://resources/vshaderGouraudTextura.glsl", "://resources/fshaderGouraudTextura.glsl");
+    program = allPrograms[2];
+    program->link();
+    program->bind();
 }
 
 void GLWidget::ensenyaMenuLlum0() {
@@ -195,30 +201,33 @@ void GLWidget::activaEnvMapping() {
     //OPICIONAL: a implementar a la practica 1
 }
 
-void GLWidget::InitShader(const char* vShaderFile, const char* fShaderFile){
+QGLShaderProgram* GLWidget::InitShader(const char* vShaderFile, const char* fShaderFile){
     QGLShader *vshader = new QGLShader(QGLShader::Vertex, this);
     QGLShader *fshader = new QGLShader(QGLShader::Fragment, this);
 
     vshader->compileSourceFile(vShaderFile);
     fshader->compileSourceFile(fShaderFile);
 
-    program = new QGLShaderProgram(this);
-    program->addShader(vshader);
-    program->addShader(fshader);
-    program->link();
-    program->bind();
-    mon->llumsToGPU(program);
-    mon->setAmbientToGPU(program);
-    for (int i=0; i<mon->elements.size(); i++){
-        mon->elements[i]->toGPU(program);
-    }
+    QGLShaderProgram* pr = new QGLShaderProgram(this);
+    pr->addShader(vshader);
+    pr->addShader(fshader);
+    return pr;
 }
 
 /**
  * @brief GLWidget::initShadersGPU
  */
 void GLWidget::initShadersGPU(){
-    InitShader("://resources/vshader1.glsl", "://resources/fshader1.glsl");
+    allPrograms[0] = InitShader("://resources/vshader1.glsl", "://resources/fshader1.glsl");
+    allPrograms[1] = InitShader("://resources/vshaderGouraud.glsl", "://resources/fshaderGouraud.glsl");
+    allPrograms[2] = InitShader("://resources/vshaderGouraudTextura.glsl", "://resources/fshaderGouraudTextura.glsl");
+    allPrograms[3] = InitShader("://resources/vshaderPhong.glsl", "://resources/fshaderPhong.glsl");
+    allPrograms[4] = InitShader("://resources/vshaderPhongTextura.glsl", "://resources/fshaderPhongTextura.glsl");
+    allPrograms[5] = InitShader("://resources/vshaderToon.glsl", "://resources/fshaderToon.glsl");
+
+    program = allPrograms[0];
+    program->link();
+    program->bind();
 }
 
 QSize GLWidget::minimumSizeHint() const {
@@ -238,23 +247,20 @@ void GLWidget::initializeGL() {
     //glEnable(GL_NORMALIZE);
 
     initShadersGPU();
-    //activaGouraudShader();
-    //activaToonShader();
-    //activaPhongShader();
 
     // Creacio d'una llum per a poder modificar el seus valors amb la interficie
-
     mon->addLlum(new Llum(Puntual));
-    //mon->addLlum(new Llum(Direccional));
-    //mon->addLlum(new Llum(SpotLight));
-
-    mon->llumsToGPU(program);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void GLWidget::paintGL() {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    mon->llumsToGPU(program);
+    mon->setAmbientToGPU(program);
+    for (int i=0; i<mon->elements.size(); i++){
+        mon->elements[i]->toGPU(program);
+    }
     mon->draw();
 }
 
@@ -289,7 +295,6 @@ void GLWidget::newObjMat(QString fichero,QString fichero2){
     mon->addObjecte(obj);
     updateGL();
 }
-
 
 // Finestra per a introduir una llum puntual o modificar-ne el seu contingut
 void GLWidget::showAuxWindowPuntualLight(Llum *light)
@@ -422,4 +427,3 @@ void GLWidget::showAuxWindowPuntualLight(Llum *light)
     auxWidget->setLayout(outer);
     auxWidget->show();
 }
-

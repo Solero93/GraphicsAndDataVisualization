@@ -10,6 +10,8 @@
 #define PROGRAM_VERTEX_ATTRIBUTE 0
 #define PROGRAM_COLOR_ATTRIBUTE 1
 
+#define NUM_PROGRAMS 6
+
 class QGLShaderProgram;
 
 class GLWidget : public QGLWidget
@@ -77,9 +79,10 @@ private:
     int yRot;
     int zRot;
 
-    QGLShaderProgram *program;
+    QGLShaderProgram *program; // current program
+    QGLShaderProgram *allPrograms[NUM_PROGRAMS];
 
-    void InitShader( const char* vertexShaderFile, const char* fragmentShaderFile );
+    QGLShaderProgram* InitShader( const char* vertexShaderFile, const char* fragmentShaderFile );
     void initShadersGPU();
 };
 
