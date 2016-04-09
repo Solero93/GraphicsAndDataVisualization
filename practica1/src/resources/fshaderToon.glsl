@@ -37,8 +37,8 @@ vec4 calculateL(int);
 void main(){
     vec4 focus = vec4(0.0, 0.0, 10.0, 1.0);
     vec3 colorv2;
-    float normalVisionAngleCos = dot(normalize(focus - pos), normalize(norm));
-    float intensity = dot(normalize(calculateL(0)),normalize(norm));
+    float normalVisionAngleCos = dot(normalize(focus - pos), norm);
+    float intensity = dot(normalize(calculateL(0)), norm);
 
     if (intensity > 0.95) {
         colorv2 = vec3(1.0,0.5,0.5);

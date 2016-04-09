@@ -10,7 +10,8 @@ IN vec4 pos;
 IN vec4 norm;
 IN vec2 v_texcoord;
 
-uniform sampler2D texMap;
+uniform sampler2D texMapImg;
+uniform sampler2D texMapNormal;
 uniform vec3 llumAmbient;
 uniform int numLlums;
 
@@ -42,7 +43,7 @@ float atenuateFactor(int,vec3);
 void main()
 {
     vec3 c = vec3(0.0, 0.0, 0.0);
-    vec4 L, H, N=norm;
+    vec4 L, H, N=0.2*norm + 0.8*texture2D(texMapNormal, v_texcoord);
     vec3 diffuseTmp, specularTmp, ambientTmp;
     float atenuation;
     for (int j=0; j<numLlums; j++){
@@ -57,7 +58,7 @@ void main()
 
         c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * bufferMat.diffuse;
     }
-    gl_FragColor = 0.2*vec4(c[0],c[1],c[2],1.0) + 0.8*texture2D(texMap, v_texcoord);
+    gl_FragColor = 0.2*vec4(c[0],c[1],c[2],1.0) + 0.8*texture2D(texMapImg, v_texcoord);
   }
 
 vec4 calculateL(int j){

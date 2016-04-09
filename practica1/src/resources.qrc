@@ -13,5 +13,7 @@
         <file>resources/vshaderGouraudTextura.glsl</file>
         <file>resources/fshaderPhongTextura.glsl</file>
         <file>resources/fshaderGouraudTextura.glsl</file>
+        <file>resources/textures/earth3.png</file>
+        <file>resources/textures/earth2.png</file>
     </qresource>
 </RCC>

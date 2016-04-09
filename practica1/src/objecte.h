@@ -36,8 +36,6 @@ protected:
 
     QGLShaderProgram *program;
 
-    QOpenGLTexture *texture;
-
     //data to make the readobj
     vec3 temporal;
 
@@ -54,14 +52,15 @@ public:
     virtual void readMat(QString filename);
     virtual void make();
     virtual void toGPU(QGLShaderProgram *p);
-    virtual void initTextura();
+    virtual void initImgTextura();
+    virtual void initNormalTextura();
+    virtual void initReflexTextura();
 
 
     virtual void draw();
 
     vector<point4> calcularNormalVertexs();
     vector<vec2> calcularCoordTextures(vector<vec4>);
-    vec4 intersectWithSphere(vec4, vec4);
 
 private:
     void construeix_cara ( char **words, int nwords);

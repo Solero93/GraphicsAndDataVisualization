@@ -48,22 +48,38 @@ void Objecte::toGPU(QGLShaderProgram *pr) {
 
     glBufferData( GL_ARRAY_BUFFER, sizeof(point4)*Index * 3 + sizeof(vec2) * Index , NULL, GL_STATIC_DRAW );
     glEnable( GL_DEPTH_TEST );
-//    glEnable( GL_TEXTURE_2D );
-
+    glEnable( GL_TEXTURE_2D );
 }
 
-void Objecte::initTextura()
+void Objecte::initImgTextura()
  {
      // Carregar la textura
      glActiveTexture(GL_TEXTURE0);
-     texture = new QOpenGLTexture(QImage("://resources/textures/earth1.png"));
+     QOpenGLTexture* texture = new QOpenGLTexture(QImage("://resources/textures/earth1.png"));
      texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
      texture->setMagnificationFilter(QOpenGLTexture::Linear);
      texture->bind(0);
-     glEnable(GL_DEPTH_TEST);
-     glEnable(GL_TEXTURE_2D);
 }
 
+void Objecte::initNormalTextura()
+{
+    // Carregar la textura de normals
+    glActiveTexture(GL_TEXTURE1);
+    QOpenGLTexture* texture = new QOpenGLTexture(QImage("://resources/textures/earth2.png"));
+    texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    texture->setMagnificationFilter(QOpenGLTexture::Linear);
+    texture->bind(1);
+}
+
+void Objecte::initReflexTextura()
+{
+    // Carregar la textura dels reflexos
+    glActiveTexture(GL_TEXTURE2);
+    QOpenGLTexture* texture = new QOpenGLTexture(QImage("://resources/textures/earth3.png"));
+    texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+    texture->setMagnificationFilter(QOpenGLTexture::Linear);
+    texture->bind(2);
+}
 
 /**
  * Pintat en la GPU.
@@ -74,8 +90,9 @@ void Objecte::draw(){
     material->toGPU(program);
 
     // S'activa la textura i es passa a la GPU
-    texture->bind(0);
-    program->setUniformValue("texMap", 0);
+    program->setUniformValue("texMapImg", 0);
+    program->setUniformValue("texMapNorm", 1);
+    program->setUniformValue("texMapRefl", 2);
 
     // Aqui es torna a repetir el pas de dades a la GPU per si hi ha més d'un objecte
     glBindBuffer( GL_ARRAY_BUFFER, buffer );
@@ -127,7 +144,9 @@ void Objecte::make(){
             Index++;
         }
     }
-    this->initTextura();
+    this->initImgTextura();
+    this->initNormalTextura();
+    this->initReflexTextura();
 }
 
 // Llegeix un fitxer .obj
@@ -343,37 +362,9 @@ vector<vec4> Objecte::calcularNormalVertexs(){
 vector<vec2> Objecte::calcularCoordTextures(vector<vec4> normals) {
     vector<vec2> coordTextures(this->numPoints);
     for (int i=0; i<vertexs.size(); i++){
-        vec4 intersection = this->intersectWithSphere(vertexs[i],normals[i]);
-        if (intersection == vec3(0.0,0.0,0.0)){
-            qDebug() << "ERROR with spherical coordinates";
-        }
-        float u = 0.5 - atan2(intersection.z, intersection.x)/(2*M_PI);
-        float v = 0.5 + asin(intersection.y)/M_PI;
+        float u = 0.5 - atan2(normals[i].z, normals[i].x)/(2*M_PI);
+        float v = 0.5 - asin(normals[i].y)/M_PI;
         coordTextures[i] = vec2(u,v);
     }
     return coordTextures;
-}
-
-vec4 Objecte::intersectWithSphere(vec4 point, vec4 normal){
-    vec4 p = point;
-    vec4 u = normal;
-    //Calculated by hand the two intersections of line (defined by normal) with unit sphere
-    if ((dot(u,p)*dot(u,p)) - length(p) + 1 < 0){
-        //Technically, should never arrive here
-            //It means there's no intersection with sphere
-        return vec4(0.0, 0.0, 0.0, 0.0);
-    }
-
-    float a1 = -(dot(u,p)) + sqrt((dot(u,p)*dot(u,p)) - length(p) + 1.0);
-    float a2 = -(dot(u,p)) - sqrt((dot(u,p)*dot(u,p)) - length(p) + 1.0);
-
-    vec4 result1 = p + a1*u;
-    vec4 result2 = p + a2*u;
-
-    //We return the intersection that's closest to point
-    if (length(result1-point) < length(result2-point)){
-        return normalize(result1 - point);
-    } else {
-        return normalize(result2 - point);
-    }
 }
