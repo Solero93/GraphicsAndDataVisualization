@@ -8,7 +8,9 @@
 
 IN vec4 pos;
 IN vec4 norm;
+IN vec2 v_texcoord;
 
+uniform sampler2D texMap;
 uniform vec3 llumAmbient;
 uniform int numLlums;
 
@@ -55,7 +57,7 @@ void main()
 
         c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * bufferMat.diffuse;
     }
-    gl_FragColor = vec4(c[0],c[1],c[2],1.0);
+    gl_FragColor = 0.2*vec4(c[0],c[1],c[2],1.0) + 0.8*texture2D(texMap, v_texcoord);
   }
 
 vec4 calculateL(int j){

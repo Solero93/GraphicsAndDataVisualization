@@ -7,7 +7,6 @@
 #endif
 
 IN vec4 vPosition;
-IN vec4 vColor;
 IN vec4 vNormal;
 
 OUT vec4 pos;

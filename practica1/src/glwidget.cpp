@@ -100,19 +100,17 @@ void GLWidget::activaPhongShader() {
 }
 
 void GLWidget::activaGouraudShader() {
-    //Added the path to activate the goraud shader
+    //Added the path to activate the gouraud shader
     InitShader("://resources/vshaderGouraud.glsl", "://resources/fshaderGouraud.glsl");
 }
 
 void GLWidget::activaPhongTex() {
-    //to implement
+    InitShader("://resources/vshaderPhongTextura.glsl", "://resources/fshaderPhongTextura.glsl");
 }
 
 
 void GLWidget::activaGouraudTex() {
-    //A implementar a la practica 1
-    cout<<"Estic a Gouraud Tex"<<endl;
-
+    InitShader("://resources/vshaderGouraudTextura.glsl", "://resources/fshaderGouraudTextura.glsl");
 }
 
 void GLWidget::ensenyaMenuLlum0() {

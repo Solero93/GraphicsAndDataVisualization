@@ -9,5 +9,9 @@
         <file>resources/vshaderPhong.glsl</file>
         <file>resources/vshaderToon.glsl</file>
         <file>resources/textures/earth1.png</file>
+        <file>resources/vshaderPhongTextura.glsl</file>
+        <file>resources/vshaderGouraudTextura.glsl</file>
+        <file>resources/fshaderPhongTextura.glsl</file>
+        <file>resources/fshaderGouraudTextura.glsl</file>
     </qresource>
 </RCC>

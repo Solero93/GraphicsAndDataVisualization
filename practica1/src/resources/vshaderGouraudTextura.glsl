@@ -8,8 +8,10 @@
 
 IN vec4 vPosition;
 IN vec4 vNormal;
+IN vec2 vCoordTextura;
 
 OUT vec4 color;
+OUT vec2 v_texcoord;
 
 uniform vec3 llumAmbient;
 uniform int numLlums;
@@ -59,6 +61,7 @@ void main()
 
       c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * bufferMat.diffuse;
   }
+  v_texcoord = vCoordTextura;
   color = vec4(c[0],c[1],c[2],1.0);
 }
 

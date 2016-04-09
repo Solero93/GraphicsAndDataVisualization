@@ -54,16 +54,14 @@ void Objecte::toGPU(QGLShaderProgram *pr) {
 
 void Objecte::initTextura()
  {
-     qDebug() << "Initializing textures...";
      // Carregar la textura
      glActiveTexture(GL_TEXTURE0);
      texture = new QOpenGLTexture(QImage("://resources/textures/earth1.png"));
      texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
      texture->setMagnificationFilter(QOpenGLTexture::Linear);
      texture->bind(0);
-     glEnable(GL_DEPTH_TEST ); //-> viene de cubGPUTextures
-     glEnable(GL_TEXTURE_2D); //-> ídem
-     //program->bind(); //-> viene de cubGPUTextures
+     glEnable(GL_DEPTH_TEST);
+     glEnable(GL_TEXTURE_2D);
 }
 
 
