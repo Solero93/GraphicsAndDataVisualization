@@ -10,7 +10,7 @@ IN vec4 vPosition;
 IN vec4 vNormal;
 IN vec2 vCoordTextura;
 
-OUT vec4 color;
+OUT vec4 diffuseColor;
 OUT vec2 v_texcoord;
 
 uniform sampler2D texMapNorm;
@@ -44,28 +44,24 @@ float atenuateFactor(int, vec3);
 
 void main()
 {
-  color = vec4(1.0,0.0,0.0,1.0);
   gl_Position = vPosition;
   vec3 c = vec3(0.0, 0.0, 0.0);
   vec4 L, H, N = 0.2*vNormal + 0.8*texture2D(texMapNorm, vCoordTextura);
-  vec3 diffuseTmp, specularTmp, ambientTmp;
+  vec3 diffuseTmp;
   float atenuation;
   for (int j=0; j<numLlums; j++){
       L = normalize(calculateL(j));
       H = normalize(calculateH(L));
 
       diffuseTmp = bufferMat.diffuse * bufferLights[j].diffuse * max(dot(L,N),0.0);
-      specularTmp = bufferMat.specular * bufferLights[j].specular * pow(max(dot(N,H),0.0), bufferMat.shininess);
-      ambientTmp = bufferMat.ambient * bufferLights[j].ambient;
 
       atenuation = atenuateFactor(j, bufferLights[j].atenuate);
 
-      c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * bufferMat.diffuse;
+      c += diffuseTmp * atenuation + llumAmbient * bufferMat.diffuse;
   }
   v_texcoord = vCoordTextura;
-  color = vec4(c[0],c[1],c[2],1.0);
+  diffuseColor = vec4(c[0],c[1],c[2],1.0);
 }
-
 
 vec4 calculateL(int j) {
     if (bufferLights[j].position == vec4(0.0, 0.0, 0.0, 0.0)) {
