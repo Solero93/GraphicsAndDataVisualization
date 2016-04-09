@@ -86,7 +86,6 @@ void GLWidget::setZRotation(int angle)
 
  }
 
-
 // Metodes que es criden des dels menús
 
 void GLWidget::activaToonShader() {

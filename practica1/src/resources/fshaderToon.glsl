@@ -49,8 +49,7 @@ void main(){
     } else {
         colorv2 = vec3(0.2,0.1,0.1);
     }
-    vec3 ambient = llumAmbient * bufferMat.diffuse;
-    vec3 colorFinal = colorv2 * (1.0 - normalVisionAngleCos) + ambient;
+    vec3 colorFinal = colorv2 * (normalVisionAngleCos);
     gl_FragColor = vec4(colorFinal[0], colorFinal[1], colorFinal[2], 1.0);
 }
 
