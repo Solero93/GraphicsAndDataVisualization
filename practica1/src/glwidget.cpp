@@ -192,11 +192,15 @@ void GLWidget::activateLight(){
 }
 
 void GLWidget::activaBumpMapping() {
-    //OPICIONAL: a implementar a la practica 1
+    program = allPrograms[6];
+    program->link();
+    program->bind();
 }
 
 void GLWidget::activaEnvMapping() {
-    //OPICIONAL: a implementar a la practica 1
+    program = allPrograms[7];
+    program->link();
+    program->bind();
 }
 
 QGLShaderProgram* GLWidget::InitShader(const char* vShaderFile, const char* fShaderFile){
@@ -222,6 +226,8 @@ void GLWidget::initShadersGPU(){
     allPrograms[3] = InitShader("://resources/vshaderPhong.glsl", "://resources/fshaderPhong.glsl");
     allPrograms[4] = InitShader("://resources/vshaderPhongTextura.glsl", "://resources/fshaderPhongTextura.glsl");
     allPrograms[5] = InitShader("://resources/vshaderToon.glsl", "://resources/fshaderToon.glsl");
+    allPrograms[6] = InitShader("://resources/vshaderBump.glsl", "://resources/fshaderBump.glsl");
+    allPrograms[7] = InitShader("://resources/vshaderEnvironmental.glsl", "://resources/fshaderEnvironmental.glsl");
 
     program = allPrograms[0];
     program->link();

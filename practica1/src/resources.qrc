@@ -15,5 +15,9 @@
         <file>resources/fshaderGouraudTextura.glsl</file>
         <file>resources/textures/earth3.png</file>
         <file>resources/textures/earth2.png</file>
+        <file>resources/vshaderBump.glsl</file>
+        <file>resources/fshaderBump.glsl</file>
+        <file>resources/vshaderEnvironmental.glsl</file>
+        <file>resources/fshaderEnvironmental.glsl</file>
     </qresource>
 </RCC>

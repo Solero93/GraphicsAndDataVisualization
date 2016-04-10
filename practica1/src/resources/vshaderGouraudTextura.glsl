@@ -13,7 +13,6 @@ IN vec2 vCoordTextura;
 OUT vec4 diffuseColor;
 OUT vec2 v_texcoord;
 
-uniform sampler2D texMapNorm;
 uniform vec3 llumAmbient;
 uniform int numLlums;
 
@@ -46,7 +45,7 @@ void main()
 {
   gl_Position = vPosition;
   vec3 c = vec3(0.0, 0.0, 0.0);
-  vec4 L, H, N = 0.2*vNormal + 0.8*texture2D(texMapNorm, vCoordTextura);
+  vec4 L, H, N=vNormal;
   vec3 diffuseTmp;
   float atenuation;
   for (int j=0; j<numLlums; j++){

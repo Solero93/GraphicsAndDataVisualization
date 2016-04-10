@@ -10,7 +10,7 @@
 #define PROGRAM_VERTEX_ATTRIBUTE 0
 #define PROGRAM_COLOR_ATTRIBUTE 1
 
-#define NUM_PROGRAMS 6
+#define NUM_PROGRAMS 8
 
 class QGLShaderProgram;
 

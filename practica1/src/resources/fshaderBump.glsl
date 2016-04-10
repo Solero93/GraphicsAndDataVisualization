@@ -11,6 +11,7 @@ IN vec4 norm;
 IN vec2 v_texcoord;
 
 uniform sampler2D texMapImg;
+uniform sampler2D texMapNorm;
 uniform vec3 llumAmbient;
 uniform int numLlums;
 
@@ -42,7 +43,7 @@ float atenuateFactor(int,vec3);
 void main()
 {
     vec3 c = vec3(0.0, 0.0, 0.0);
-    vec4 L, H, N=norm;
+    vec4 L, H, N=0.2*norm + 0.8*texture2D(texMapNorm, v_texcoord);
     vec3 diffuseTmp;
     float atenuation;
     for (int j=0; j<numLlums; j++){

@@ -11,6 +11,7 @@ IN vec4 norm;
 IN vec2 v_texcoord;
 
 uniform sampler2D texMapImg;
+uniform sampler2D texMapReflex;
 uniform vec3 llumAmbient;
 uniform int numLlums;
 
@@ -45,11 +46,13 @@ void main()
     vec4 L, H, N=norm;
     vec3 diffuseTmp;
     float atenuation;
+    vec4 reflex = texture2D(texMapReflex, v_texcoord);
     for (int j=0; j<numLlums; j++){
         L = normalize(calculateL(j));
         H = normalize(calculateH(L));
 
-        diffuseTmp = bufferMat.diffuse * bufferLights[j].diffuse * max(dot(L,N),0.0);
+        diffuseTmp = (0.2*bufferMat.diffuse + 0.8*reflex.xyz)
+                * bufferLights[j].diffuse * max(dot(L,N),0.0);
 
         atenuation = atenuateFactor(j, bufferLights[j].atenuate);
 
