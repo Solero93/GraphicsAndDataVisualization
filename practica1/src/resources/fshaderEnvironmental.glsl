@@ -44,21 +44,25 @@ void main()
 {
     vec3 c = vec3(0.0, 0.0, 0.0);
     vec4 L, H, N=norm;
-    vec3 diffuseTmp;
+    vec3 diffuseTmp, specularTmp, ambientTmp;
     float atenuation;
+    vec4 textura = texture2D(texMapImg, v_texcoord);
     vec4 reflex = texture2D(texMapReflex, v_texcoord);
     for (int j=0; j<numLlums; j++){
         L = normalize(calculateL(j));
         H = normalize(calculateH(L));
 
-        diffuseTmp = (0.2*bufferMat.diffuse + 0.8*reflex.xyz)
+        diffuseTmp = (0.2*bufferMat.diffuse + 0.8*textura.xyz)
                 * bufferLights[j].diffuse * max(dot(L,N),0.0);
+        specularTmp = (0.2*bufferMat.specular + 0.8*reflex.xyz)
+                * bufferLights[j].specular * pow(max(dot(N,H),0.0), bufferMat.shininess);
+        ambientTmp = bufferMat.ambient * bufferLights[j].ambient;
 
         atenuation = atenuateFactor(j, bufferLights[j].atenuate);
 
-        c += diffuseTmp * atenuation + llumAmbient * bufferMat.diffuse;
+        c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * bufferMat.ambient;
     }
-    gl_FragColor = 0.2*vec4(c[0],c[1],c[2],1.0) + 0.8*texture2D(texMapImg, v_texcoord);
+    gl_FragColor = vec4(c[0],c[1],c[2],1.0);
   }
 
 vec4 calculateL(int j){

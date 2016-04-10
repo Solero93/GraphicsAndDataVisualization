@@ -53,7 +53,7 @@ void main()
 
         atenuation = atenuateFactor(j, bufferLights[j].atenuate);
 
-        c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * bufferMat.diffuse;
+        c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * bufferMat.ambient;
     }
     gl_FragColor = vec4(c[0],c[1],c[2],1.0);
   }
