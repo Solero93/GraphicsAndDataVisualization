@@ -64,26 +64,37 @@ void GLWidget::setZRotation(int angle)
 
  void GLWidget:: keyPressEvent(QKeyEvent *event)
  {
+     const float angle = 20.0;
+     mat4 m;
      if (event->key() == Qt::Key_Up)
      {
-     setYRotation(yRot + 8);
+     m = RotateX(angle);
      }
      else if(event->key() == Qt::Key_Down)
      {
-     setYRotation(yRot - 8);
+     m = RotateX(-angle);
      }
      else if(event->key() == Qt::Key_Left)
      {
-     setYRotation(xRot + 8);
+     m = RotateY(-angle);
      }
      else if(event->key() == Qt::Key_Right)
      {
-     setYRotation(xRot - 8);
+     m = RotateY(angle);
      }
      else
      {
+         m = RotateX(0.0);
      }
-
+     for (int i=0; i<mon->elements.size(); i++){
+         for (int j=0; j<mon->elements[i]->vertexs.size(); j++){
+             mon->elements[i]->vertexs[j] = m*mon->elements[i]->vertexs[j];
+         }
+         mon->elements[i]->make();
+         mon->elements[i]->toGPU(program);
+         mon->elements[i]->draw();
+     }
+     updateGL();
  }
 
 // Metodes que es criden des dels menús

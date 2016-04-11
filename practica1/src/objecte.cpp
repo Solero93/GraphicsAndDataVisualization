@@ -23,6 +23,7 @@ Objecte::Objecte(int npoints, QString n, QString m) : numPoints(npoints){
     points = new point4[numPoints];
     colors = new point4[numPoints];
     normals = new vec4[numPoints];
+    vertexsTextura = new vec2[numPoints];
     readObj(n);
     material = new Material();
     qDebug() << "abc" << n << "def";
@@ -152,7 +153,7 @@ void Objecte::make(){
 // Llegeix un fitxer .obj
 //  Si el fitxer referencia fitxers de materials (.mtl), encara no es llegeixen
 //  Tots els elements del fitxer es llegeixen com a un unic objecte.
-void Objecte::readObj(QString filename){
+void Objecte::readObj(QString filename) {
 
     FILE *fp = fopen(filename.toLocal8Bit(),"rb");
     if (!fp)
@@ -333,10 +334,8 @@ void Objecte::readMat(QString filename){
                 temporal = vec3(x,y,z);
                 material->setDiffuse(temporal);
             }
-
         }
     }
-
 }
 
 vector<vec4> Objecte::calcularNormalVertexs(){

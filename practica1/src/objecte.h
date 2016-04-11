@@ -19,8 +19,6 @@ class Objecte : public QObject {
     Q_OBJECT
 protected:
     QString nom;
-    vector<Cara> cares;
-    vector<point4> vertexs;
 
     GLuint buffer;
 
@@ -40,6 +38,8 @@ protected:
     vec3 temporal;
 
 public:
+    vector<Cara> cares;
+    vector<point4> vertexs;
 
     Objecte(const int npoints, QObject *parent = 0);
     Objecte(const int npoints, QString n);

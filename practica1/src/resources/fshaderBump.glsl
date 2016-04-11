@@ -44,7 +44,7 @@ void main()
 {
     vec3 c = vec3(0.0, 0.0, 0.0);
     vec4 normalAlt = texture2D(texMapNorm, v_texcoord); // Last coordinate is 1, must change to 0
-    vec4 L, H, N=0.2*norm + 0.8*vec4(normalAlt[0],normalAlt[1],normalAlt[2],0.0);
+    vec4 L, H, N=0.2*normalize(norm) + 0.8*vec4(normalAlt[0],normalAlt[1],normalAlt[2],0.0);
     vec3 diffuseTmp, specularTmp, ambientTmp;
     float atenuation;
     vec4 textura = texture2D(texMapImg, v_texcoord);

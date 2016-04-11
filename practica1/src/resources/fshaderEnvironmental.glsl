@@ -43,7 +43,7 @@ float atenuateFactor(int,vec3);
 void main()
 {
     vec3 c = vec3(0.0, 0.0, 0.0);
-    vec4 L, H, N=norm;
+    vec4 L, H, N=normalize(norm);
     vec3 diffuseTmp, specularTmp, ambientTmp;
     float atenuation;
     vec4 textura = texture2D(texMapImg, v_texcoord);
