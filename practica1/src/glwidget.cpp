@@ -84,17 +84,19 @@ void GLWidget::setZRotation(int angle)
      }
      else
      {
-         m = RotateX(0.0);
+         m = NULL;
      }
-     for (int i=0; i<mon->elements.size(); i++){
-         for (int j=0; j<mon->elements[i]->vertexs.size(); j++){
-             mon->elements[i]->vertexs[j] = m*mon->elements[i]->vertexs[j];
+     if (m!=NULL){
+         for (int i=0; i<mon->elements.size(); i++){
+             for (int j=0; j<mon->elements[i]->vertexs.size(); j++){
+                 mon->elements[i]->vertexs[j] = m*mon->elements[i]->vertexs[j];
+             }
+             mon->elements[i]->draw();
          }
-         mon->elements[i]->make();
-         mon->elements[i]->toGPU(program);
-         mon->elements[i]->draw();
+         mon->llumsToGPU(program);
+         updateGL();
+         paintGL();
      }
-     updateGL();
  }
 
 // Metodes que es criden des dels menús

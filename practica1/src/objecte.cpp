@@ -87,8 +87,17 @@ void Objecte::initReflexTextura()
  * @brief Objecte::draw
  */
 void Objecte::draw(){
-
     material->toGPU(program);
+    Index = 0;
+
+    vector<point4> tmpNormals = this->calcularNormalVertexs();
+    for(unsigned int i=0; i<cares.size(); i++){
+        for(unsigned int j=0; j<cares[i].idxVertices.size(); j++){
+            points[Index] = vertexs[cares[i].idxVertices[j]];
+            normals[Index] = tmpNormals[cares[i].idxVertices[j]];
+            Index++;
+        }
+    }
 
     // S'activa la textura i es passa a la GPU
     program->setUniformValue("texMapImg", 0);
