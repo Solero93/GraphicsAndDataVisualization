@@ -34,16 +34,29 @@ class Object {
 class Sphere : public Object {
   public:
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;  //  To figure out if the Ray hit this object.
+    Sphere(glm::vec3,float,
+           const glm::mat4 &transform = glm::mat4(1.0f), const Material &material = Material());
+    glm::vec3 center;
+    float radius;
 };
 
 /* TODO: Implementar en el punt 2 de l'enunciat*/
 class Plane : public Object {
   public:
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;
+    Plane(glm::vec3,glm::vec3,glm::vec3,
+          const glm::mat4 &transform = glm::mat4(1.0f), const Material &material = Material());
+    glm::vec3 p1;
+    glm::vec3 p2;
+    glm::vec3 p3;
+    glm::vec3 normal;
 };
 
 /* TODO: Implementar com a extensio*/
-class Triangle : public Object {
+class Triangle : public Plane {
   public:
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;
+    Triangle(glm::vec3,glm::vec3,glm::vec3,
+             const glm::mat4 &transform = glm::mat4(1.0f), const Material &material = Material());
+    bool isPointOfTriangle(glm::vec3);
 };
