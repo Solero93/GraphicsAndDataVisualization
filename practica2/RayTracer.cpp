@@ -35,6 +35,7 @@ void Render()
     // Recorregut de cada pixel de la imatge final
     for(int x = 0; x < scene->cam->viewportX; ++x)
         for(int y = 0; y < scene->cam->viewportY; ++y){
+            // Pasar de coordenadas viewport a coordenadas window normalizados
             float pixelX =  2*((x+0.5f)/scene->cam->viewportX)-1;
             float pixelY = -2*((y+0.5f)/scene->cam->viewportY)+1;
 

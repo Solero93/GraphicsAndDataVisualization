@@ -33,12 +33,12 @@ Triangle::Triangle(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3,const glm::mat4 &tra
 bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
     //https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
     glm::vec3 o = ray.origin;
-    glm::vec3 u = ray.direction;
+    glm::vec3 u = glm::normalize(ray.direction);
     glm::vec3 c = this->center;
     float r = this->radius;
     // If there's no intersection, return false;
-    float discriminant = (glm::dot(u,(o-c))*glm::dot(u,(o-c))) - glm::length((o-c)) + r*r;
-    if (discriminant < 0){
+    float discriminant = (glm::dot(u,(o-c))*glm::dot(u,(o-c))) - glm::length((o-c))*glm::length((o-c)) + r*r;
+    if (discriminant < 0) {
         return false;
     }
     float a1 = -(glm::dot(u,(o-c))) + sqrt(discriminant);

@@ -1,11 +1,14 @@
 #include "Scene.h"
+#include <iostream>
+
+using namespace std;
 
 Scene::Scene()
 {
     // Afegeix la camera a l'escena
     cam = new Camera();
     // TODO: Cal crear els objectes de l'escena (punt 2 de l'enunciat)
-
+    this->objects.push_back(new Sphere(glm::vec3(0.0,0.0,0.0),0.25));
     // TODO: Cal afegir llums a l'escena (punt 4 de l'enunciat)
 
 }
@@ -31,7 +34,12 @@ Scene::~Scene()
 */
 
 bool Scene::CheckIntersection(const Ray &ray, IntersectInfo &info) {
-    return true;
+    for(unsigned int i = 0; i < objects.size(); ++i){
+        if(objects[i]->Intersect(ray, info)){
+            return true;
+        }
+    }
+    return false;
     // TODO: Heu de codificar la vostra solucio per aquest metode substituint el 'return true'
     // Una possible solucio es cridar Intersect per a tots els objectes i quedar-se amb la interseccio
     // mes propera a l'observador, en el cas que n'hi hagi més d'una.
