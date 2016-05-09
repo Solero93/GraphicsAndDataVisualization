@@ -8,7 +8,7 @@ Scene::Scene()
     // Afegeix la camera a l'escena
     cam = new Camera();
     // TODO: Cal crear els objectes de l'escena (punt 2 de l'enunciat)
-    this->objects.push_back(new Plane(glm::vec3(0.25,0.25,0.26),glm::vec3(0.35,0.35,0.22),glm::vec3(0.45,0.45,0.29)));
+    this->objects.push_back(new Sphere(vec3(0.0,0.0,0.0),1.0));
     // TODO: Cal afegir llums a l'escena (punt 4 de l'enunciat)
 
 }
@@ -76,12 +76,12 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
            payload ha d'anar tenint el color actualitzat segons els rebots.
         */
 
-        payload.color = glm::vec3(fabs(ray.direction.x),fabs(ray.direction.y),fabs(ray.direction.z)) ;
+        payload.color = vec3(fabs(ray.direction.x),fabs(ray.direction.y),fabs(ray.direction.z)) ;
 
         return info.time;
     }
     else{
-        payload.color = glm::vec3(0.0f);
+        payload.color = vec3(0.0f);
         // Si el ray des de la camera no intersecta amb cap objecte
         // no s'ha de veure res, encara que també es podria posar el color de la Intensita ambien global
         return -1.0f;

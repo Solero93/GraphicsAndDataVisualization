@@ -144,8 +144,5 @@ HEADERS += \
     glm/ext.hpp \
     glm/glm.hpp \
     Camera.h \
-    Scene.h \
-    vec.h \
-    mat.h \
-    Common.h
+    Scene.h
 

@@ -24,10 +24,10 @@ Camera::Camera(const glm::vec3 &_obs,
     viewportX(_viewportX), viewportY(_viewportY){
 }
 
-void Camera::IniViewProjMatrices()
+void Camera::IniViewProjMatrices(float width, float height)
 {
-    this->viewMatrix = glm::lookAt(obs,vrp,vup);
-    this->projMatrix = glm::perspective(angleObertura,(viewportX/viewportY),zNear,zFar);
+    this->viewMatrix = lookAt(obs,vrp,vup);
+    this->projMatrix = perspective(angleObertura,width/height,zNear,zFar);
     // Inicialització de les matrius viewMatrix i projMatrix
     //	Utilitzeu els metodes de lookAt i perspective
     //  que teniu a  glm.h

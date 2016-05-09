@@ -5,34 +5,36 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+using namespace glm;
+
 class Camera {
 public:
     Camera();
-    Camera(const glm::vec3 &_obs,
-                   const glm::vec3 &_vrp,
-                   const glm::vec3 &_vup,
+    Camera(const vec3 &_obs,
+                   const vec3 &_vrp,
+                   const vec3 &_vup,
                    float _angleObertura,
                    float _zNear,
                    float _zFar,
                    int _viewportX,
                    int _viewportY);
 
-    void IniViewProjMatrices();
+    void IniViewProjMatrices(float, float);
 
 // Camera:
 // Vectors base del sistema de coordenades de camera
 /*
 ** obs es la posicio de l'observador
 */
-glm::vec3 obs;
+vec3 obs;
 /*
 ** vrp es el View Reference Point
 */
-glm::vec3 vrp;
+vec3 vrp;
 /*
  ** vup es el vector de verticalitat
  **/
-glm::vec3 vup;
+vec3 vup;
 
 // Tipus de projeccio: Perspectiva
 /*
@@ -53,8 +55,8 @@ int viewportX;
 int viewportY;
 
 // Matrius de visualitzacio
-glm::mat4 viewMatrix;
-glm::mat4 projMatrix;
+mat4 viewMatrix;
+mat4 projMatrix;
 
 };
 

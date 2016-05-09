@@ -13,6 +13,8 @@
 
 #include "Scene.h"
 
+using namespace glm;
+
 Scene *scene;
 
 void Render();
