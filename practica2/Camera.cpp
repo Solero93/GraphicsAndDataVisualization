@@ -10,7 +10,6 @@ Camera::Camera():
 {
 }
 
-
 Camera::Camera(const glm::vec3 &_obs,
                const glm::vec3 &_vrp,
                const glm::vec3 &_vup,

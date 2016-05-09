@@ -1,10 +1,13 @@
 #ifndef LLUM_H
 #define LLUM_H
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
+using namespace glm;
+
 #define NO_VECTOR vec4(0.0,0.0,0.0,0.0)
 #define NO_COLOR vec3(0.0,0.0,0.0)
-
-#include <Common.h>
 
 // Tipus de llums
 enum Lights {Puntual, Direccional, SpotLight};
@@ -12,7 +15,6 @@ enum Lights {Puntual, Direccional, SpotLight};
 // Classe que representa els atributs d'una llum
 class Llum {
     public:
-        GLuint id;
         vec4 position;
         vec4 direction;
         vec3 ambient;

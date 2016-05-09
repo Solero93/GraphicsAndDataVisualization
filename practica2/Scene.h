@@ -30,7 +30,7 @@ public:
     /*
      * TODO: Cal afegir el conjunt de llums de l'escena
      */
-    vector<Llum*> llums;
+    std::vector<Llum*> llums;
 
 };
 
