@@ -1,6 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include <llum.h>
 #include "Camera.h"
 #include "Ray.h"
 #include "Object.h"
@@ -27,7 +28,10 @@ public:
     /*
      * TODO: Cal afegir el conjunt de llums de l'escena
      */
+    vector<Llum*> llums;
 
 };
+
+
 
 #endif // SCENE_H

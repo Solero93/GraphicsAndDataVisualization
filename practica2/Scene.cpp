@@ -21,6 +21,7 @@ Scene::~Scene()
             delete objects[i];
         }
     }
+    llums.clear();
 }
 
 

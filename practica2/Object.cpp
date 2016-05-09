@@ -3,12 +3,12 @@
 
 using namespace std;
 
-Material::Material():
-    ambient(1.0f),
-    diffuse(1.0f),
-    specular(1.0f),
-    shininess(10.0f)
-  {}
+Material::Material(){
+    ambient = glm::vec3(0.2,0.2,0.2);
+    diffuse = glm::vec3(0.8,0.0,0.0);
+    specular = glm::vec3(1.0,1.0,1.0);
+    shininess = 20.0;
+}
 
 Object::Object(const glm::mat4 &transform, const Material &material):
     transform(transform),
