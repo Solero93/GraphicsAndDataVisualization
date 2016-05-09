@@ -1,4 +1,7 @@
 #include "Object.h"
+#include <iostream>
+
+using namespace std;
 
 Material::Material():
     ambient(1.0f),
@@ -65,6 +68,7 @@ bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
 
 /* TODO: Implementar en el punt 2 */
 bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
+
     //https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
     glm::vec3 p0 = this->p1;
     glm::vec3 n = this->normal;
@@ -72,7 +76,7 @@ bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
     glm::vec3 l0 = ray.origin;
     glm::vec3 l = ray.direction;
 
-    if (glm::dot(l,n) == 0){
+    if (glm::dot(l,n) == 0.0){
         return false;
     } else {
         info.time = (glm::dot((p0-l0),n))/(glm::dot(l,n));

@@ -25,7 +25,7 @@ void Render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Netejar la finestra OpenGL
 
     // TODO: Cridar a IniViewProjMatrices de la classe camera (punt 2 de l'enunciat)
-
+    scene->cam->IniViewProjMatrices();
 
     glBegin(GL_POINTS);	//S'activa el mode GL_POINTS. En aquest mode
                         // cada vertex especificat és un punt.
@@ -47,6 +47,11 @@ void Render()
 
             // TODO: Cal canviar aquestes 2 linies per a fer la transformacio de pixel a coordenades de mon de forma correcta
             // en qualsevol transformacio perspectiva
+
+            /*
+             * 1. Coger dos puntos p1, p2 tal que z_p1 = -1 y z_p2 = 1 (el z_p2 tiene que ser z_near)
+             * 2. formar recta de ellos, interseccionar y encontrar lo primero que choque
+             */
 
             glm::vec3 pixelPosWorld = glm::vec3(pixelX, pixelY, 0.0f);
             glm::vec3 direction = glm::normalize(glm::vec3(pixelPosWorld-scene->cam->obs));
