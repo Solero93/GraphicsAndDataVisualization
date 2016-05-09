@@ -10,6 +10,7 @@ Scene::Scene()
     // TODO: Cal crear els objectes de l'escena (punt 2 de l'enunciat)
     this->objects.push_back(new Sphere(vec3(0.0,0.0,0.0),1.0));
     // TODO: Cal afegir llums a l'escena (punt 4 de l'enunciat)
+    this->addLlum(new Llum(Puntual));
 
 }
 
@@ -88,4 +89,75 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
         return -1.0f;
     }
 }
+
+
+void Scene::addLlum(Llum *l) {
+    llums.push_back(l);
+}
+
+vec3 Scene::calculatePhong(vec3 /*rellenar*/)
+{
+    vec3 c = vec3(0.0, 0.0, 0.0);
+    vec4 L, H, N=normalize(norm);
+    vec3 diffuseTmp, specularTmp, ambientTmp;
+    float atenuation;
+    for (int j=0; j<numLlums; j++){
+        L = normalize(calculateL(j));
+        H = normalize(calculateH(L));
+
+        diffuseTmp = bufferMat.diffuse * bufferLights[j].diffuse * max(dot(L,N),0.0);
+        specularTmp = bufferMat.specular * bufferLights[j].specular * pow(max(dot(N,H),0.0), bufferMat.shininess);
+        ambientTmp = bufferMat.ambient * bufferLights[j].ambient;
+
+        atenuation = atenuateFactor(j, bufferLights[j].atenuate);
+
+        c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * bufferMat.ambient;
+    }
+    gl_FragColor = vec4(c[0],c[1],c[2],1.0);
+  }
+
+vec4 Scene::calculateL(int j){
+    if (bufferLights[j].position == vec4(0.0, 0.0, 0.0, 0.0)) {
+        return -(bufferLights[j].direction);
+    } else if (bufferLights[j].angle == 0.0) {
+        return bufferLights[j].position - pos;
+    } else {
+        vec4 rayDirection = normalize(pos - bufferLights[j].position);
+        vec4 coneDirection = normalize(bufferLights[j].direction);
+
+        float lightToSurfaceAngle = acos(dot(rayDirection, coneDirection));
+        if (lightToSurfaceAngle > bufferLights[j].angle) {
+            return vec4(0.0, 0.0, 0.0, 0.0);
+        } else {
+            return -rayDirection;
+        }
+    }
+}
+
+vec4 Scene::calculateH(vec4 L){
+    vec4 F = vec4(0.0, 0.0, 10.0, 1.0); // Focus de l'observador
+    vec4 V = normalize(F - pos);
+    return L + V;
+}
+
+float Scene::atenuateFactor(int j, vec3 atenuate){
+    vec4 rayDirection = bufferLights[j].position - pos;
+    float a = atenuate[0], b = atenuate[1], c = atenuate[2];
+    float d = length(rayDirection);
+    return 1.0/(a + b*d + c*d*d);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
