@@ -2,12 +2,14 @@
 
 #include "Ray.h"
 
+using namespace glm;
+
 class Material {
   public:
     Material();
-    glm::vec3 ambient;
-    glm::vec3 diffuse;   
-    glm::vec3 specular;	
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
     float shininess;
 
 };
@@ -15,14 +17,14 @@ class Material {
 // Es la classe pare de tots els objectes que s'han de visualitzar.
 class Object {
   public:
-    Object(const glm::mat4 &transform = glm::mat4(1.0f), const Material &material = Material());
+    Object(const mat4 &transform = mat4(1.0f), const Material &material = Material());
 
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const { return true; }
-    glm::vec3 Position() const { return glm::vec3(transform[3][0], transform[3][1], transform[3][2]); }
+    vec3 Position() const { return vec3(transform[3][0], transform[3][1], transform[3][2]); }
     const Material *MaterialPtr() const { return &material; }
 
   protected:
-    glm::mat4 transform;  // Matriu de transformacio de coordenades locals a globals
+    mat4 transform;  // Matriu de transformacio de coordenades locals a globals
     Material material;
 };
 
@@ -34,9 +36,9 @@ class Object {
 class Sphere : public Object {
   public:
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;  //  To figure out if the Ray hit this object.
-    Sphere(glm::vec3,float,
-           const glm::mat4 &transform = glm::mat4(1.0f), const Material &material = Material());
-    glm::vec3 center;
+    Sphere(vec3,float,
+           const mat4 &transform = mat4(1.0f), const Material &material = Material());
+    vec3 center;
     float radius;
 };
 
@@ -44,19 +46,19 @@ class Sphere : public Object {
 class Plane : public Object {
   public:
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;
-    Plane(glm::vec3,glm::vec3,glm::vec3,
-          const glm::mat4 &transform = glm::mat4(1.0f), const Material &material = Material());
-    glm::vec3 p1;
-    glm::vec3 p2;
-    glm::vec3 p3;
-    glm::vec3 normal;
+    Plane(vec3,vec3,vec3,
+          const mat4 &transform = mat4(1.0f), const Material &material = Material());
+    vec3 p1;
+    vec3 p2;
+    vec3 p3;
+    vec3 normal;
 };
 
 /* TODO: Implementar com a extensio*/
 class Triangle : public Plane {
   public:
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;
-    Triangle(glm::vec3,glm::vec3,glm::vec3,
-             const glm::mat4 &transform = glm::mat4(1.0f), const Material &material = Material());
-    bool isPointOfTriangle(glm::vec3);
+    Triangle(vec3,vec3,vec3,
+             const mat4 &transform = mat4(1.0f), const Material &material = Material());
+    bool isPointOfTriangle(vec3);
 };

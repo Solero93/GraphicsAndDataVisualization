@@ -7,6 +7,8 @@
 #include "Object.h"
 #include <vector> //Notice that vector in C++ is different from Vector2, Vector3 or similar things in a graphic library.
 
+using namespace glm;
+
 class Scene
 {
 public:

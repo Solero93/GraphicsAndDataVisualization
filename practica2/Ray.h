@@ -3,20 +3,22 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+using namespace glm;
+
 class Material;
 
 class Ray {
   public:
-    glm::vec3 origin;
-    glm::vec3 direction;
+    vec3 origin;
+    vec3 direction;
 
-    Ray(const glm::vec3 &origin, const glm::vec3 &direction):
+    Ray(const vec3 &origin, const vec3 &direction):
       origin(origin),
       direction(direction)
     {}
 
     /* retorna el punt del raig en en temps/lambda t */
-    glm::vec3 operator() (const float &t) const {
+    vec3 operator() (const float &t) const {
       return origin + direction*t;
     }
 };
@@ -33,9 +35,9 @@ class IntersectInfo {
 
     
     /* El punt d'interseccio en coordenades 3D */
-    glm::vec3 hitPoint;
+    vec3 hitPoint;
     /* El vector normal a la superficie en el punt d'interseccio */
-    glm::vec3 normal;
+    vec3 normal;
     /* El temps/lambda del raig on passa la interseccio */
     float time;
     /* El material de l'objecte intersectat*/
@@ -60,7 +62,7 @@ class Payload {
         numBounces(0)
      {}
     
-    glm::vec3 color;//  A cada moment de la recursivitat, quan s'intersecta amb algun objecte, es canvia el color del PayLoad
+    vec3 color;//  A cada moment de la recursivitat, quan s'intersecta amb algun objecte, es canvia el color del PayLoad
     int numBounces; //  Per a controlar el fi de la recursivitat, amb el nombre de rebots.
 };
 

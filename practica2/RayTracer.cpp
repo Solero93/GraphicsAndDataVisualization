@@ -25,7 +25,7 @@ void Render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Netejar la finestra OpenGL
 
     // TODO: Cridar a IniViewProjMatrices de la classe camera (punt 2 de l'enunciat)
-    scene->cam->IniViewProjMatrices();
+    scene->cam->IniViewProjMatrices(1.0,1.0);
 
     glBegin(GL_POINTS);	//S'activa el mode GL_POINTS. En aquest mode
                         // cada vertex especificat és un punt.
@@ -33,6 +33,9 @@ void Render()
 
     std::cout<<"observador:"<<scene->cam->obs.x<<","<<scene->cam->obs.y<<","<<scene->cam->obs.z<<std::endl;
     // Recorregut de cada pixel de la imatge final
+
+    mat4 changeOfCoordinates = inverse(scene->cam->viewMatrix) * inverse(scene->cam->projMatrix);
+
     for(int x = 0; x < scene->cam->viewportX; ++x)
         for(int y = 0; y < scene->cam->viewportY; ++y){
             // Pasar de coordenadas viewport a coordenadas window normalizados
@@ -45,6 +48,8 @@ void Render()
             // es 1. Aixi, sota aquests suposits, les coordenades de window es poden calcular amb el calcul
             // de pixelX, pixelY i les coordenades mon i de camera es poden considerar les mateixes.
 
+
+
             // TODO: Cal canviar aquestes 2 linies per a fer la transformacio de pixel a coordenades de mon de forma correcta
             // en qualsevol transformacio perspectiva
 
@@ -53,13 +58,14 @@ void Render()
              * 2. formar recta de ellos, interseccionar y encontrar lo primero que choque
              */
 
-            glm::vec3 pixelPosWorld = glm::vec3(pixelX, pixelY, 0.0f);
-            glm::vec3 direction = glm::normalize(glm::vec3(pixelPosWorld-scene->cam->obs));
+            vec4 pix1 = changeOfCoordinates * vec4(pixelX, pixelY, scene->cam->zNear, 1.0f);
+            vec4 pix2 = changeOfCoordinates * vec4(pixelX, pixelY, scene->cam->zFar, 1.0f);
+            vec3 direction = normalize(vec3(pix2.x - pix1.x, pix2.y - pix1.y, pix2.z - pix1.z));
 
             Payload payload;
             // Creacio del raig
-            // HELP: Ray(const glm::vec3 &origin, const glm::vec3 &direction)
-            Ray ray(scene->cam->obs, direction) ;
+            // HELP: Ray(const vec3 &origin, const vec3 &direction)
+            Ray ray(vec3(pix1), direction);
 
             if(scene->CastRay(ray,payload) > 0.0f){
 				glColor3f(payload.color.x,payload.color.y,payload.color.z);
