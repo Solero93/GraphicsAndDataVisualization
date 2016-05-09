@@ -48,8 +48,6 @@ void Render()
             // es 1. Aixi, sota aquests suposits, les coordenades de window es poden calcular amb el calcul
             // de pixelX, pixelY i les coordenades mon i de camera es poden considerar les mateixes.
 
-
-
             // TODO: Cal canviar aquestes 2 linies per a fer la transformacio de pixel a coordenades de mon de forma correcta
             // en qualsevol transformacio perspectiva
 
@@ -58,9 +56,11 @@ void Render()
              * 2. formar recta de ellos, interseccionar y encontrar lo primero que choque
              */
 
-            vec4 pix1 = changeOfCoordinates * vec4(pixelX, pixelY, scene->cam->zNear, 1.0f);
-            vec4 pix2 = changeOfCoordinates * vec4(pixelX, pixelY, scene->cam->zFar, 1.0f);
-            vec3 direction = normalize(vec3(pix2.x - pix1.x, pix2.y - pix1.y, pix2.z - pix1.z));
+            vec4 pix1 = changeOfCoordinates * vec4(pixelX, pixelY, -1.0f, 1.0f);
+            pix1 = pix1/pix1.w;
+            vec4 pix2 = changeOfCoordinates * vec4(pixelX, pixelY, 1.0f, 1.0f);
+            pix2 = pix2/pix2.w;
+            vec3 direction = normalize(vec3(pix2 - pix1));
 
             Payload payload;
             // Creacio del raig
@@ -75,7 +75,7 @@ void Render()
                 glColor3f(1,0,0);
 			}
 
-			glVertex3f(pixelX,pixelY,0.0f);
+            glVertex3f(pixelX,pixelY,0.0f);
 		}
   
 	glEnd();

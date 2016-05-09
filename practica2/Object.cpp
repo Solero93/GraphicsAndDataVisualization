@@ -41,28 +41,28 @@ bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
     float r = this->radius;
     // If there's no intersection, return false;
     float discriminant = (dot(u,(o-c))*dot(u,(o-c))) - length((o-c))*length((o-c)) + r*r;
-    if (discriminant < 0) {
+    if (discriminant < 0.0) {
         return false;
     }
     float a1 = -(dot(u,(o-c))) + sqrt(discriminant);
     float a2 = -(dot(u,(o-c))) - sqrt(discriminant);
-    vec3 result1 = o + a1*u;
-    vec3 result2 = o + a2*u;
-      //We return the intersection that's closest to point
-    /**
-      TODO hace falta saber si devolver la intersección de detrás del observador
-      */
-    if (length(result1-o) < length(result2-o)){
-        info.time = a1;
-        info.hitPoint = result1;
-        info.normal = normalize(result1-c);
-        info.material = &this->material;
+
+    float time;
+
+    if (a1 < 0.0){
+        return false;
+    } else if (a2 < 0.0) {
+        time = a1;
     } else {
-        info.time = a2;
-        info.hitPoint = result2;
-        info.normal = normalize(result2-c);
-        info.material = &this->material;
+        time = a2;
     }
+
+    vec3 result = o + time*u;
+    info.time = time;
+    info.hitPoint = result;
+    info.normal = normalize(result - c);
+    info.material = &this->material;
+
     return true;
 }
 
