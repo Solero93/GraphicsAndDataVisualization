@@ -57,9 +57,9 @@ void Render()
              */
 
             vec4 pix1 = changeOfCoordinates * vec4(pixelX, pixelY, -1.0f, 1.0f);
-            pix1 = pix1/pix1.w;
+            pix1 /= pix1.w;
             vec4 pix2 = changeOfCoordinates * vec4(pixelX, pixelY, 1.0f, 1.0f);
-            pix2 = pix2/pix2.w;
+            pix2 /= pix2.w;
             vec3 direction = normalize(vec3(pix2 - pix1));
 
             Payload payload;

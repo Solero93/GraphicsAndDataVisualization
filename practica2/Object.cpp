@@ -89,5 +89,6 @@ bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
 
 /* TODO: Implementar com a extensio */
 bool Triangle::Intersect(const Ray &ray, IntersectInfo &info) const {
-    return -1.0f;
+    /*bool t = Plane::Intersect(&ray, &info);
+    return (!t || this->isPointOfTriangle(info.hitPoint));*/
 }
