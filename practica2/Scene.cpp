@@ -8,10 +8,12 @@ Scene::Scene()
     // Afegeix la camera a l'escena
     cam = new Camera();
     // TODO: Cal crear els objectes de l'escena (punt 2 de l'enunciat)
+    this->llumAmbient = vec3(0.05,0.05,0.05);
+
     this->objects.push_back(new Sphere(vec3(0.0,0.0,0.0),1.0));
+    this->objects.push_back(new Plane(vec3(-1.0,-1.0,-1.0),vec3(0.0,-1.0,0.0), vec3(0.0,0.0,-2.0)));
     // TODO: Cal afegir llums a l'escena (punt 4 de l'enunciat)
     this->addLlum(new Llum(Puntual));
-
 }
 
 Scene::~Scene()
@@ -78,9 +80,20 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
            payload ha d'anar tenint el color actualitzat segons els rebots.
         */
 
-        payload.color = calculatePhong(info);
+        vec3 c = llumAmbient * info.material->ambient;
+        IntersectInfo tmp = info;
 
-        //payload.color = vec3(fabs(ray.direction.x),fabs(ray.direction.y),fabs(ray.direction.z)) ;
+        for(int i=0; i<llums.size(); i++){
+            vec3 L = this->calculateL(i, tmp.hitPoint);
+            Ray r(tmp.hitPoint + TOL*L, L);
+            if (CheckIntersection(r, info)){
+                c += llums[i]->ambient;
+            } else {
+                c += calculatePhong(info);
+            }
+        }
+
+        payload.color = c;
 
         return info.time;
     }
@@ -103,7 +116,7 @@ vec3 Scene::calculatePhong(IntersectInfo info)
     vec3 L, H, N=normalize(info.normal);
     vec3 diffuseTmp, specularTmp, ambientTmp;
     float atenuation;
-    for (int j=0; j<1; j++){
+    for (int j=0; j<llums.size(); j++){
         L = normalize(calculateL(j, info.hitPoint));
         H = normalize(calculateH(L, info.hitPoint));
 

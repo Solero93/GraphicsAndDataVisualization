@@ -1,6 +1,8 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#define TOL 0.1f
+
 #include <llum.h>
 #include "Camera.h"
 #include "Ray.h"
@@ -31,6 +33,8 @@ public:
     /*
      * TODO: Cal afegir el conjunt de llums de l'escena
      */
+    vec3 llumAmbient;
+
     std::vector<Llum*> llums;
     void addLlum(Llum *l);
 

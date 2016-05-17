@@ -79,7 +79,11 @@ bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
     if (dot(l,n) == 0.0){
         return false;
     } else {
-        info.time = (dot((p0-l0),n))/(dot(l,n));
+        float time = (dot((p0-l0),n))/(dot(l,n));
+        if (time < 0.0) {
+            return false;
+        }
+        info.time = time;
         info.hitPoint = info.time * l + l0;
         info.normal = this->normal;
         info.material = &this->material;
