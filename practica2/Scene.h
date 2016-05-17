@@ -1,7 +1,9 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#define TOL 0.1f
+#define EPSILON 0.1f
+#define TOL 0.01f
+#define MAX_REFLECT 10
 
 #include <llum.h>
 #include "Camera.h"
@@ -43,9 +45,8 @@ public:
     vec3 calculateH(vec3 L, vec3);
     vec3 calculateL(int j, vec3);
     vec3 calculatePhong(IntersectInfo);
+    IntersectInfo closestIntersection(Ray ray);
     vec3 shade(IntersectInfo info, Ray ray);
 };
-
-
 
 #endif // SCENE_H

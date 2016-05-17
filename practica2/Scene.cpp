@@ -38,7 +38,7 @@ Scene::~Scene()
 */
 
 bool Scene::CheckIntersection(const Ray &ray, IntersectInfo &info) {
-    for(unsigned int i = 0; i < objects.size(); ++i){
+    for(unsigned int i = 0; i < objects.size(); i++){
         if(objects[i]->Intersect(ray, info)){
             return true;
         }
@@ -92,13 +92,26 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
     }
 }
 
+IntersectInfo Scene::closestIntersection(Ray ray){
+    IntersectInfo info;
+    objects[0]->Intersect(ray, info);
+    IntersectInfo nearest = info;
+    for(unsigned int i = 1; i < objects.size(); i++){
+        objects[i]->Intersect(ray, info);
+        if (length(info.hitPoint - cam->obs) < length(nearest.hitPoint - cam->obs)){
+            nearest = info;
+        }
+    }
+    return nearest;
+}
+
 vec3 Scene::shade(IntersectInfo info, Ray ray){
     vec3 c = llumAmbient * info.material->ambient;
     IntersectInfo tmp = info;
 
     for(int i=0; i<llums.size(); i++){
         vec3 L = this->calculateL(i, tmp.hitPoint);
-        Ray r(tmp.hitPoint + TOL*L, L);
+        Ray r(tmp.hitPoint + EPSILON*L, L);
         if (CheckIntersection(r, info)){
             c += llums[i]->ambient;
         } else {
