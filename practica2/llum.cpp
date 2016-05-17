@@ -7,7 +7,7 @@ Llum::Llum(Lights t) {
 void Llum::setTipusLlum(Lights t) {
     switch(t) {
     case Puntual:
-        this->position = vec4(2.0,2.0,2.0,1.0);
+        this->position = vec3(2.0,2.0,2.0);
         this->direction = NO_VECTOR;
         this->ambient = vec3(0.2,0.2,0.2);
         this->diffuse = vec3(0.8,0.8,0.8);
@@ -17,7 +17,7 @@ void Llum::setTipusLlum(Lights t) {
         break;
     case Direccional:
         this->position = NO_VECTOR;
-        this->direction = -vec4(2.0,2.0,2.0,0.0);
+        this->direction = -vec3(2.0,2.0,2.0);
         this->ambient = vec3(0.2,0.2,0.2);
         this->diffuse = vec3(0.8,0.8,0.8);
         this->specular = vec3(1.0,1.0,1.0);
@@ -25,8 +25,8 @@ void Llum::setTipusLlum(Lights t) {
         this->atenuate = vec3(1.0,0.0,0.0);
         break;
     case SpotLight:
-        this->position = vec4(0.0, -1.0, 0.0, 1.0);
-        this->direction = vec4(0.0, 1.0, 0.0, 0.0);
+        this->position = vec3(0.0, -1.0, 0.0);
+        this->direction = vec3(0.0, 1.0, 0.0);
         this->ambient = vec3(0.2,0.2,0.2);
         this->diffuse = vec3(0.5,0.5,0.5);
         this->specular = vec3(0.5,0.5,0.5);
@@ -37,20 +37,20 @@ void Llum::setTipusLlum(Lights t) {
     this->isActive = true;
 }
 
-vec4 Llum::getPosition() {
+vec3 Llum::getPosition() {
     return this->position;
 }
-vec4 Llum::getDirection(){
+vec3 Llum::getDirection(){
     return this->direction;
 }
 vec3 Llum::getAmbient() {
-    return isActive ? this->ambient: NO_COLOR;
+    return isActive ? this->ambient: NO_VECTOR;
 }
 vec3 Llum::getDiffuse() {
-    return isActive ? this->diffuse : NO_COLOR;
+    return isActive ? this->diffuse : NO_VECTOR;
 }
 vec3 Llum::getSpecular() {
-    return isActive ? this->specular : NO_COLOR;
+    return isActive ? this->specular : NO_VECTOR;
 }
 float Llum::getAngle() {
     return this->angle;
@@ -59,10 +59,10 @@ vec3 Llum::getAtenuate(){
     return this->atenuate;
 }
 
-void Llum::setPosition(vec4 v) {
+void Llum::setPosition(vec3 v) {
     this->position = v;
 }
-void Llum::setDirection(vec4 v) {
+void Llum::setDirection(vec3 v) {
     this->direction = v;
 }
 void Llum::setAmbient(vec3 i){

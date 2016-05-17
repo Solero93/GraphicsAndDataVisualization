@@ -78,7 +78,9 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
            payload ha d'anar tenint el color actualitzat segons els rebots.
         */
 
-        payload.color = vec3(fabs(ray.direction.x),fabs(ray.direction.y),fabs(ray.direction.z)) ;
+        payload.color = calculatePhong(info);
+
+        //payload.color = vec3(fabs(ray.direction.x),fabs(ray.direction.y),fabs(ray.direction.z)) ;
 
         return info.time;
     }
@@ -95,53 +97,54 @@ void Scene::addLlum(Llum *l) {
     llums.push_back(l);
 }
 
-vec3 Scene::calculatePhong(vec3 /*rellenar*/)
+vec3 Scene::calculatePhong(IntersectInfo info)
 {
     vec3 c = vec3(0.0, 0.0, 0.0);
-    vec4 L, H, N=normalize(norm);
+    vec3 L, H, N=normalize(info.normal);
     vec3 diffuseTmp, specularTmp, ambientTmp;
     float atenuation;
-    for (int j=0; j<numLlums; j++){
-        L = normalize(calculateL(j));
-        H = normalize(calculateH(L));
+    for (int j=0; j<1; j++){
+        L = normalize(calculateL(j, info.hitPoint));
+        H = normalize(calculateH(L, info.hitPoint));
 
-        diffuseTmp = bufferMat.diffuse * bufferLights[j].diffuse * max(dot(L,N),0.0);
-        specularTmp = bufferMat.specular * bufferLights[j].specular * pow(max(dot(N,H),0.0), bufferMat.shininess);
-        ambientTmp = bufferMat.ambient * bufferLights[j].ambient;
+        diffuseTmp = info.material->diffuse * llums[j]->diffuse * glm::max(dot(L,N),0.0f);
+        specularTmp = info.material->specular * llums[j]->specular * pow(glm::max(dot(N,H),0.0f), info.material->shininess);
+        ambientTmp = info.material->ambient * llums[j]->ambient;
 
-        atenuation = atenuateFactor(j, bufferLights[j].atenuate);
+        atenuation = atenuateFactor(j, llums[j]->atenuate, info.hitPoint);
 
-        c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * bufferMat.ambient;
+        vec3 llumAmbient = vec3(0.0,0.0,0.0); // hasta que no sepamos si hay o no
+        c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * info.material->ambient;
     }
-    gl_FragColor = vec4(c[0],c[1],c[2],1.0);
+    return c;
   }
 
-vec4 Scene::calculateL(int j){
-    if (bufferLights[j].position == vec4(0.0, 0.0, 0.0, 0.0)) {
-        return -(bufferLights[j].direction);
-    } else if (bufferLights[j].angle == 0.0) {
-        return bufferLights[j].position - pos;
+vec3 Scene::calculateL(int j, vec3 hitPoint){
+    if (llums[j]->position == vec3(0.0, 0.0, 0.0)) {
+        return -(llums[j]->direction);
+    } else if (llums[j]->angle == 0.0) {
+        return llums[j]->position - hitPoint;
     } else {
-        vec4 rayDirection = normalize(pos - bufferLights[j].position);
-        vec4 coneDirection = normalize(bufferLights[j].direction);
+        vec3 rayDirection = normalize(hitPoint - llums[j]->position);
+        vec3 coneDirection = normalize(llums[j]->direction);
 
         float lightToSurfaceAngle = acos(dot(rayDirection, coneDirection));
-        if (lightToSurfaceAngle > bufferLights[j].angle) {
-            return vec4(0.0, 0.0, 0.0, 0.0);
+        if (lightToSurfaceAngle > llums[j]->angle) {
+            return vec3(0.0, 0.0, 0.0);
         } else {
             return -rayDirection;
         }
     }
 }
 
-vec4 Scene::calculateH(vec4 L){
-    vec4 F = vec4(0.0, 0.0, 10.0, 1.0); // Focus de l'observador
-    vec4 V = normalize(F - pos);
+vec3 Scene::calculateH(vec3 L, vec3 hitPoint){
+    vec3 F = vec3(0.0, 0.0, 10.0); // Focus de l'observador
+    vec3 V = normalize(F - hitPoint);
     return L + V;
 }
 
-float Scene::atenuateFactor(int j, vec3 atenuate){
-    vec4 rayDirection = bufferLights[j].position - pos;
+float Scene::atenuateFactor(int j, vec3 atenuate, vec3 hitPoint){
+    vec3 rayDirection = llums[j]->position - hitPoint;
     float a = atenuate[0], b = atenuate[1], c = atenuate[2];
     float d = length(rayDirection);
     return 1.0/(a + b*d + c*d*d);

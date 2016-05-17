@@ -35,10 +35,10 @@ public:
     void addLlum(Llum *l);
 
     /*metodes de calcular les llums*/
-    float atenuateFactor(int j, vec3 atenuate);
-    vec4 calculateH(vec4 L);
-    vec4 calculateL(int j);
-    vec3 calculatePhong(vec3 /*rellenar*/);
+    float atenuateFactor(int j, vec3 atenuate, vec3);
+    vec3 calculateH(vec3 L, vec3);
+    vec3 calculateL(int j, vec3);
+    vec3 calculatePhong(IntersectInfo);
 };
 
 
