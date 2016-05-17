@@ -43,6 +43,7 @@ public:
     vec3 calculateH(vec3 L, vec3);
     vec3 calculateL(int j, vec3);
     vec3 calculatePhong(IntersectInfo);
+    vec3 shade(IntersectInfo info, Ray ray);
 };
 
 

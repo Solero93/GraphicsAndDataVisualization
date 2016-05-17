@@ -80,20 +80,7 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
            payload ha d'anar tenint el color actualitzat segons els rebots.
         */
 
-        vec3 c = llumAmbient * info.material->ambient;
-        IntersectInfo tmp = info;
-
-        for(int i=0; i<llums.size(); i++){
-            vec3 L = this->calculateL(i, tmp.hitPoint);
-            Ray r(tmp.hitPoint + TOL*L, L);
-            if (CheckIntersection(r, info)){
-                c += llums[i]->ambient;
-            } else {
-                c += calculatePhong(info);
-            }
-        }
-
-        payload.color = c;
+        payload.color = shade(info,ray);
 
         return info.time;
     }
@@ -105,6 +92,21 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
     }
 }
 
+vec3 Scene::shade(IntersectInfo info, Ray ray){
+    vec3 c = llumAmbient * info.material->ambient;
+    IntersectInfo tmp = info;
+
+    for(int i=0; i<llums.size(); i++){
+        vec3 L = this->calculateL(i, tmp.hitPoint);
+        Ray r(tmp.hitPoint + TOL*L, L);
+        if (CheckIntersection(r, info)){
+            c += llums[i]->ambient;
+        } else {
+            c += calculatePhong(info);
+        }
+    }
+    return c;
+}
 
 void Scene::addLlum(Llum *l) {
     llums.push_back(l);
