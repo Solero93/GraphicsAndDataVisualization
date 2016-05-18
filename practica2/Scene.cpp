@@ -103,7 +103,7 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
         return info.time;
     }
     else{
-        payload.color = vec3(0.0f);
+        payload.color = vec3(0.2f);
         // Si el ray des de la camera no intersecta amb cap objecte
         // no s'ha de veure res, encara que també es podria posar el color de la Intensita ambien global
         return -1.0f;
@@ -171,3 +171,18 @@ float Scene::atenuateFactor(int j, vec3 atenuate, vec3 hitPoint){
     float d = length(rayDirection);
     return 1.0/(a + b*d + c*d*d);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
