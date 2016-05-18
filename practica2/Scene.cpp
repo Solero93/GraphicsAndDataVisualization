@@ -1,6 +1,13 @@
 #include "Scene.h"
 #include <iostream>
 
+#define WALL_FRONT 5.0
+#define WALL_BACK 5.0
+#define WALL_LEFT -5.0
+#define WALL_RIGHT 5.0
+#define WALL_UP 5.0
+#define WALL_DOWN -5.0
+
 using namespace std;
 
 Scene::Scene()
@@ -8,10 +15,15 @@ Scene::Scene()
     // Afegeix la camera a l'escena
     cam = new Camera();
     // TODO: Cal crear els objectes de l'escena (punt 2 de l'enunciat)
-    this->llumAmbient = vec3(0.05,0.05,0.05);
+    this->llumAmbient = vec3(0.5,0.5,0.5);
 
-    this->objects.push_back(new Sphere(vec3(0.0,0.0,0.0),1.0));
-    this->objects.push_back(new Plane(vec3(-1.0,-1.0,-1.0),vec3(0.0,-1.0,0.0), vec3(0.0,0.0,-2.0)));
+    //this->objects.push_back(new Sphere(vec3(0.0,0.0,0.0),1.0));
+    //this->objects.push_back(new Plane(vec3(1.0,0.0,WALL_FRONT),vec3(0.0,1.0,WALL_FRONT), vec3(0.0,0.0,WALL_FRONT)));
+    this->objects.push_back(new Plane(vec3(1.0, 0.0, WALL_BACK),vec3(0.0, 1.0, WALL_BACK), vec3(0.0, 0.0, WALL_BACK)));
+    //this->objects.push_back(new Plane(vec3(1.0,WALL_UP,0.0),vec3(0.0,WALL_UP,1.0), vec3(0.0,WALL_UP,0.0)));
+    //this->objects.push_back(new Plane(vec3(1.0,WALL_DOWN,0.0),vec3(0.0,WALL_DOWN,1.0), vec3(0.0,WALL_DOWN,0.0)));
+    //this->objects.push_back(new Plane(vec3(WALL_LEFT,1.0,0.0),vec3(WALL_LEFT,0.0,1.0), vec3(WALL_LEFT,0.0,0.0)));
+    //this->objects.push_back(new Plane(vec3(WALL_RIGHT,1.0,0.0),vec3(WALL_RIGHT,0.0,1.0), vec3(WALL_RIGHT,0.0,0.0)));
     // TODO: Cal afegir llums a l'escena (punt 4 de l'enunciat)
     this->addLlum(new Llum(Puntual));
 }
@@ -38,12 +50,18 @@ Scene::~Scene()
 */
 
 bool Scene::CheckIntersection(const Ray &ray, IntersectInfo &info) {
-    for(unsigned int i = 0; i < objects.size(); i++){
-        if(objects[i]->Intersect(ray, info)){
-            return true;
+    IntersectInfo tmp;
+    bool trobat = false;
+    for(unsigned int i = 0; i < objects.size(); i++) {
+        if (objects[i]->Intersect(ray, tmp) && tmp.time > 0 && tmp.time < info.time){
+            info.hitPoint = tmp.hitPoint;
+            info.material = tmp.material;
+            info.normal = tmp.normal;
+            info.time = tmp.time;
+            trobat = true;
         }
     }
-    return false;
+    return trobat;
     // TODO: Heu de codificar la vostra solucio per aquest metode substituint el 'return true'
     // Una possible solucio es cridar Intersect per a tots els objectes i quedar-se amb la interseccio
     // mes propera a l'observador, en el cas que n'hi hagi més d'una.
@@ -92,7 +110,7 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
     }
 }
 
-IntersectInfo Scene::closestIntersection(Ray ray){
+/*IntersectInfo Scene::closestIntersection(Ray ray){
     IntersectInfo info;
     objects[0]->Intersect(ray, info);
     IntersectInfo nearest = info;
@@ -103,19 +121,19 @@ IntersectInfo Scene::closestIntersection(Ray ray){
         }
     }
     return nearest;
-}
+}*/
 
 vec3 Scene::shade(IntersectInfo info, Ray ray){
     vec3 c = llumAmbient * info.material->ambient;
     IntersectInfo tmp = info;
 
     for(int i=0; i<llums.size(); i++){
-        vec3 L = this->calculateL(i, tmp.hitPoint);
+        vec3 L = llums[i]->position - info.hitPoint;
         Ray r(tmp.hitPoint + EPSILON*L, L);
         if (CheckIntersection(r, info)){
-            c += llums[i]->ambient;
+            c += llums[i]->ambient * info.material->ambient;
         } else {
-            c += calculatePhong(info);
+            c += calculatePhong(info, r);
         }
     }
     return c;
@@ -125,15 +143,15 @@ void Scene::addLlum(Llum *l) {
     llums.push_back(l);
 }
 
-vec3 Scene::calculatePhong(IntersectInfo info)
+vec3 Scene::calculatePhong(IntersectInfo info, Ray &ray)
 {
     vec3 c = vec3(0.0, 0.0, 0.0);
     vec3 L, H, N=normalize(info.normal);
     vec3 diffuseTmp, specularTmp, ambientTmp;
     float atenuation;
     for (int j=0; j<llums.size(); j++){
-        L = normalize(calculateL(j, info.hitPoint));
-        H = normalize(calculateH(L, info.hitPoint));
+        L = normalize(llums[j]->position - info.hitPoint);
+        H = normalize(L + ray.direction);
 
         diffuseTmp = info.material->diffuse * llums[j]->diffuse * glm::max(dot(L,N),0.0f);
         specularTmp = info.material->specular * llums[j]->specular * pow(glm::max(dot(N,H),0.0f), info.material->shininess);
@@ -147,48 +165,9 @@ vec3 Scene::calculatePhong(IntersectInfo info)
     return c;
   }
 
-vec3 Scene::calculateL(int j, vec3 hitPoint){
-    if (llums[j]->position == vec3(0.0, 0.0, 0.0)) {
-        return -(llums[j]->direction);
-    } else if (llums[j]->angle == 0.0) {
-        return llums[j]->position - hitPoint;
-    } else {
-        vec3 rayDirection = normalize(hitPoint - llums[j]->position);
-        vec3 coneDirection = normalize(llums[j]->direction);
-
-        float lightToSurfaceAngle = acos(dot(rayDirection, coneDirection));
-        if (lightToSurfaceAngle > llums[j]->angle) {
-            return vec3(0.0, 0.0, 0.0);
-        } else {
-            return -rayDirection;
-        }
-    }
-}
-
-vec3 Scene::calculateH(vec3 L, vec3 hitPoint){
-    vec3 F = vec3(0.0, 0.0, 10.0); // Focus de l'observador
-    vec3 V = normalize(F - hitPoint);
-    return L + V;
-}
-
 float Scene::atenuateFactor(int j, vec3 atenuate, vec3 hitPoint){
     vec3 rayDirection = llums[j]->position - hitPoint;
     float a = atenuate[0], b = atenuate[1], c = atenuate[2];
     float d = length(rayDirection);
     return 1.0/(a + b*d + c*d*d);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

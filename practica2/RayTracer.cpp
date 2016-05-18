@@ -70,9 +70,8 @@ void Render()
             if(scene->CastRay(ray,payload) > 0.0f){
 				glColor3f(payload.color.x,payload.color.y,payload.color.z);
 			} 
-			else {
-                // TODO: A canviar per la Intensitat ambient global
-                glColor3f(1,0,0);
+            else {
+                glColor3f(scene->llumAmbient.x,scene->llumAmbient.y,scene->llumAmbient.z);
 			}
 
             glVertex3f(pixelX,pixelY,0.0f);

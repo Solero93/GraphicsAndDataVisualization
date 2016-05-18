@@ -1,7 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#define EPSILON 0.1f
+#define EPSILON 0.0001f
 #define TOL 0.01f
 #define MAX_REFLECT 10
 
@@ -22,7 +22,6 @@ public:
     bool  CheckIntersection(const Ray &ray, IntersectInfo &info);
     float CastRay(Ray &ray, Payload &payload);
 
-
     /*
     ** std::vector d'objectes continguts a l'escena
     */
@@ -42,9 +41,7 @@ public:
 
     /*metodes de calcular les llums*/
     float atenuateFactor(int j, vec3 atenuate, vec3);
-    vec3 calculateH(vec3 L, vec3);
-    vec3 calculateL(int j, vec3);
-    vec3 calculatePhong(IntersectInfo);
+    vec3 calculatePhong(IntersectInfo, Ray&);
     IntersectInfo closestIntersection(Ray ray);
     vec3 shade(IntersectInfo info, Ray ray);
 };
