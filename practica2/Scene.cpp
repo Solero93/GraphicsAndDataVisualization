@@ -11,7 +11,11 @@ Scene::Scene()
     this->llumAmbient = vec3(0.05,0.05,0.05);
 
     this->objects.push_back(new Sphere(vec3(0.0,0.0,0.0),1.0));
-    this->objects.push_back(new Plane(vec3(-1.0,-1.0,-1.0),vec3(0.0,-1.0,0.0), vec3(0.0,0.0,-2.0)));
+    //this->objects.push_back(new Sphere(vec3(2.0,2.0,0.0),0.5));
+    //this->objects.push_back(new Plane(vec3(-1.0,0.0,0.0),vec3(0.0,-1.0,0.0), vec3(0.0,0.0,-1.0)));
+    //this->objects.push_back(new Plane(vec3( -5.0 , 0.0 , 0.0),vec3(-5.0 , 1.0, 0.0), vec3(-5.0 , 0.0 , -13.0)));
+    this->objects.push_back(new Plane(vec3(-7.0 , 0.0 , 0.0),vec3(0.0 ,5.0 , 0.0), vec3(0.0 , 0.0 , -12.0)));
+    //this->objects.push_back(new Plane(vec3( -5.0 , 0.0 , 0.0),vec3(-5.0 , 1.0, 0.0), vec3(-5.0 , 0.0 , -13.0)));
     // TODO: Cal afegir llums a l'escena (punt 4 de l'enunciat)
     this->addLlum(new Llum(Puntual));
 }
@@ -85,7 +89,7 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
         return info.time;
     }
     else{
-        payload.color = vec3(0.0f);
+        payload.color = vec3(0.2f);
         // Si el ray des de la camera no intersecta amb cap objecte
         // no s'ha de veure res, encara que també es podria posar el color de la Intensita ambien global
         return -1.0f;
@@ -107,11 +111,12 @@ IntersectInfo Scene::closestIntersection(Ray ray){
 
 vec3 Scene::shade(IntersectInfo info, Ray ray){
     vec3 c = llumAmbient * info.material->ambient;
-    IntersectInfo tmp = info;
+    //no es necesario
+    //IntersectInfo tmp = info;
 
     for(int i=0; i<llums.size(); i++){
-        vec3 L = this->calculateL(i, tmp.hitPoint);
-        Ray r(tmp.hitPoint + EPSILON*L, L);
+        vec3 L = this->calculateL(i, info.hitPoint);
+        Ray r(info.hitPoint + EPSILON*L, L);
         if (CheckIntersection(r, info)){
             c += llums[i]->ambient;
         } else {
@@ -142,7 +147,7 @@ vec3 Scene::calculatePhong(IntersectInfo info)
         atenuation = atenuateFactor(j, llums[j]->atenuate, info.hitPoint);
 
         vec3 llumAmbient = vec3(0.0,0.0,0.0); // hasta que no sepamos si hay o no
-        c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * info.material->ambient;
+        c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient* 0.5f * info.material->ambient;
     }
     return c;
   }
