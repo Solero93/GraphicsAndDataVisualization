@@ -1,12 +1,14 @@
 #include "Scene.h"
 #include <iostream>
 
-#define WALL_FRONT 2.0
-#define WALL_BACK -5.0
-#define WALL_LEFT -5.0
-#define WALL_RIGHT 5.0
-#define WALL_UP 5.0
-#define WALL_DOWN -5.0
+#define WALL_FRONT -100.0
+#define WALL_BACK 100.0
+#define WALL_LEFT -100.0
+#define WALL_RIGHT 100.0
+#define WALL_UP 100.0
+#define WALL_DOWN -100.0
+
+#define SILVER mat4(1.0f),Material(vec3(0.19225,0.19225,0.19225),vec3(0.50754,0.50754,0.50754),vec3(0.508273,0.508273,0.508273),0.4)
 
 using namespace std;
 
@@ -15,17 +17,15 @@ Scene::Scene()
     // Afegeix la camera a l'escena
     cam = new Camera();
     // TODO: Cal crear els objectes de l'escena (punt 2 de l'enunciat)
-    this->llumAmbient = vec3(0.5,0.5,0.5);
+    this->llumAmbient = vec3(0.1,0.1,0.1);
 
-    //this->objects.push_back(new Sphere(vec3(0.0,0.0,0.0),1.0));
-    this->objects.push_back(new Plane(vec3(1.0,0.0,WALL_FRONT),vec3(0.0,1.0,WALL_FRONT), vec3(0.0,0.0,WALL_FRONT),
-                                      mat4(1.0f),Material(vec3(0.19225,0.19225,0.19225),vec3(0.50754,0.50754,0.50754),
-                                                          vec3(0.508273,0.508273,0.508273),0.4)));
-    //this->objects.push_back(new Plane(vec3(1.0, 0.0, WALL_BACK),vec3(0.0, 1.0, WALL_BACK), vec3(0.0, 0.0, WALL_BACK)));
-    //this->objects.push_back(new Plane(vec3(1.0,WALL_UP,0.0),vec3(0.0,WALL_UP,1.0), vec3(0.0,WALL_UP,0.0)));
-    //this->objects.push_back(new Plane(vec3(1.0,WALL_DOWN,0.0),vec3(0.0,WALL_DOWN,1.0), vec3(0.0,WALL_DOWN,0.0)));
-    //this->objects.push_back(new Plane(vec3(WALL_LEFT,1.0,0.0),vec3(WALL_LEFT,0.0,1.0), vec3(WALL_LEFT,0.0,0.0)));
-    //this->objects.push_back(new Plane(vec3(WALL_RIGHT,1.0,0.0),vec3(WALL_RIGHT,0.0,1.0), vec3(WALL_RIGHT,0.0,0.0)));
+    this->objects.push_back(new Sphere(vec3(0.0,0.0,0.0),1.0));
+    this->objects.push_back(new Plane(vec3(1.0,0.0,WALL_FRONT),vec3(0.0,1.0,WALL_FRONT), vec3(0.0,0.0,WALL_FRONT), SILVER));
+//    this->objects.push_back(new Plane(vec3(1.0, 0.0, WALL_BACK),vec3(0.0, 1.0, WALL_BACK), vec3(0.0, 0.0, WALL_BACK), SILVER));
+//    this->objects.push_back(new Plane(vec3(1.0,WALL_UP,0.0),vec3(0.0,WALL_UP,1.0), vec3(0.0,WALL_UP,0.0), SILVER));
+//    this->objects.push_back(new Plane(vec3(1.0,WALL_DOWN,0.0),vec3(0.0,WALL_DOWN,1.0), vec3(0.0,WALL_DOWN,0.0), SILVER));
+//    this->objects.push_back(new Plane(vec3(WALL_LEFT,1.0,0.0),vec3(WALL_LEFT,0.0,1.0), vec3(WALL_LEFT,0.0,0.0), SILVER));
+//    this->objects.push_back(new Plane(vec3(WALL_RIGHT,1.0,0.0),vec3(WALL_RIGHT,0.0,1.0), vec3(WALL_RIGHT,0.0,0.0), SILVER));
     // TODO: Cal afegir llums a l'escena (punt 4 de l'enunciat)
     this->addLlum(new Llum(vec3(0.0,0.0,9.0)));
 }
