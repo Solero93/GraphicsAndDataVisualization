@@ -9,38 +9,18 @@ using namespace glm;
 #define NO_VECTOR vec3(0.0,0.0,0.0)
 
 // Tipus de llums
-enum Lights {Puntual, Direccional, SpotLight};
 
 // Classe que representa els atributs d'una llum
 class Llum {
     public:
         vec3 position;
-        vec3 direction;
         vec3 ambient;
         vec3 diffuse;
         vec3 specular;
-        float angle;
         vec3 atenuate;
-        bool isActive;
 
-        Llum(Lights l);
-        void setTipusLlum(Lights t);
-        vec3 getPosition();
-        vec3 getDirection();
-        vec3 getAmbient();
-        vec3 getDiffuse();
-        vec3 getSpecular();
-        float getAngle();
-        vec3 getAtenuate();
-
-        void setPosition(vec3 v);
-        void setDirection(vec3 v);
-        void setAmbient(vec3 i);
-        void setDiffuse(vec3 i);
-        void setSpecular(vec3 i);
-        void setAngle(float a);
-        void setAtenuate(vec3 at);
-        void switchOnOff();
+        Llum(vec3 pos, vec3 amb=vec3(0.2,0.2,0.2), vec3 dif=vec3(0.8,0.8,0.8),
+             vec3 spec=vec3(1.0,1.0,1.0), vec3 atenuate=vec3(1.0,0.0,0.0));
 };
 
 #endif // LLUM_H

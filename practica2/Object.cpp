@@ -4,10 +4,18 @@
 using namespace std;
 
 Material::Material(){
-    ambient = glm::vec3(0.2,0.2,0.2);
-    diffuse = glm::vec3(0.8,0.0,0.0);
-    specular = glm::vec3(1.0,1.0,1.0);
+    //Default material
+    ambient = vec3(0.2,0.2,0.2);
+    diffuse = vec3(0.8,0.0,0.0);
+    specular = vec3(1.0,1.0,1.0);
     shininess = 20.0;
+}
+
+Material::Material(vec3 amb, vec3 dif, vec3 spec, float shin){
+    this->ambient = amb;
+    this->diffuse = dif;
+    this->specular = spec;
+    this->shininess = shin;
 }
 
 Object::Object(const mat4 &transform, const Material &material):
@@ -47,7 +55,7 @@ bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
     float a1 = -(dot(u,(o-c))) + sqrt(discriminant);
     float a2 = -(dot(u,(o-c))) - sqrt(discriminant);
 
-    float time;
+    float time = ((abs(a1) < abs(a2)) ? a1 : a2);
 
     if (a1 < 0.0){
         return false;
@@ -84,7 +92,7 @@ bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
             return false;
         }
         info.time = time;
-        info.hitPoint = info.time * l + l0;
+        info.hitPoint = time * l + l0;
         info.normal = this->normal;
         info.material = &this->material;
         return true;

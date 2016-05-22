@@ -7,6 +7,7 @@ using namespace glm;
 class Material {
   public:
     Material();
+    Material(vec3,vec3,vec3,float);
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
