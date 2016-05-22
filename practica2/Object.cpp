@@ -34,7 +34,7 @@ Plane::Plane(vec3 p1, vec3 p2, vec3 p3, const mat4 &transform, const Material &m
     this->p1 = p1;
     this->p2 = p2;
     this->p3 = p3;
-    this->normal = normalize(cross((p3-p1),(p2-p1)));
+    this->normal = normalize(cross((p2-p1),(p3-p1)));
 }
 
 Triangle::Triangle(vec3 p1, vec3 p2, vec3 p3,const mat4 &transform, const Material &material)
@@ -86,17 +86,17 @@ bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
 
     if (dot(l,n) == 0.0){
         return false;
-    } else {
-        float time = (dot((p0-l0),n))/(dot(l,n));
-        if (time < 0.0) {
-            return false;
-        }
-        info.time = time;
-        info.hitPoint = time * l + l0;
-        info.normal = this->normal;
-        info.material = &this->material;
-        return true;
     }
+    float time = (dot((p0-l0),n))/(dot(l,n));
+    if (time < 0.0) {
+        return false;
+    }
+
+    info.time = time;
+    info.hitPoint = time * l + l0;
+    info.normal = this->normal;
+    info.material = &this->material;
+    return true;
 }
 
 /* TODO: Implementar com a extensio */
