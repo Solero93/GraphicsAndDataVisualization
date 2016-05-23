@@ -27,7 +27,7 @@ Scene::Scene()
 //    this->objects.push_back(new Plane(vec3(WALL_LEFT,1.0,0.0),vec3(WALL_LEFT,0.0,1.0), vec3(WALL_LEFT,0.0,0.0), SILVER));
 //    this->objects.push_back(new Plane(vec3(WALL_RIGHT,1.0,0.0),vec3(WALL_RIGHT,0.0,1.0), vec3(WALL_RIGHT,0.0,0.0), SILVER));
     // TODO: Cal afegir llums a l'escena (punt 4 de l'enunciat)
-    this->addLlum(new Llum(vec3(0.0,0.0,9.0)));
+    this->addLlum(new Llum(vec3(0.0,0.5,9.0)));
 }
 
 Scene::~Scene()
@@ -99,13 +99,22 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
            Inicialment s'ha posat la direccio del raig per tenir un color diferents per a cada pixel pero
            payload ha d'anar tenint el color actualitzat segons els rebots.
         */
-
-        payload.color = shade(info,ray);
-
+        if (payload.numBounces > MAX_REFLECT) {
+            return info.time;
+        }
+        vec3 phongColor = shade(info,ray);
+        if (length(phongColor-payload.color) < TOL){
+            return info.time;
+        }
+        payload.color += shade(info,ray);
+        vec3 R = (2.0f*dot(info.normal,ray.direction))*info.normal - ray.direction;
+        Ray reflected(info.hitPoint, R);
+        payload.numBounces++;
+        CastRay(reflected, payload);
         return info.time;
     }
     else{
-        payload.color = vec3(0.2f);
+        //payload.color = vec3(0.2f);
         // Si el ray des de la camera no intersecta amb cap objecte
         // no s'ha de veure res, encara que també es podria posar el color de la Intensita ambien global
         return -1.0f;
