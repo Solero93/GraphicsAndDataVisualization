@@ -8,7 +8,7 @@
 #define WALL_UP 100.0
 #define WALL_DOWN -100.0
 
-#define SILVER mat4(1.0f),Material(vec3(0.19225,0.19225,0.19225),vec3(0.50754,0.50754,0.50754),vec3(0.508273,0.508273,0.508273),0.4)
+#define SILVER mat4(1.0f),Material(vec3(0.19225,0.19225,0.19225),vec3(0.50754,0.50754,0.50754),vec3(0.508273,0.508273,0.508273),99)
 
 using namespace std;
 
@@ -19,7 +19,8 @@ Scene::Scene()
     // TODO: Cal crear els objectes de l'escena (punt 2 de l'enunciat)
     this->llumAmbient = vec3(0.1,0.1,0.1);
 
-    this->objects.push_back(new Sphere(vec3(0.0,0.0,0.0),1.0));
+//    this->objects.push_back(new Sphere(vec3(0.0,0.0,0.0),1.0));
+    this->objects.push_back(new Sphere(vec3(0.0,3.0,0.0),1.0));
     this->objects.push_back(new Plane(vec3(1.0,0.0,WALL_FRONT),vec3(0.0,1.0,WALL_FRONT), vec3(0.0,0.0,WALL_FRONT), SILVER));
 //    this->objects.push_back(new Plane(vec3(1.0, 0.0, WALL_BACK),vec3(0.0, 1.0, WALL_BACK), vec3(0.0, 0.0, WALL_BACK), SILVER));
 //    this->objects.push_back(new Plane(vec3(1.0,WALL_UP,0.0),vec3(0.0,WALL_UP,1.0), vec3(0.0,WALL_UP,0.0), SILVER));
@@ -27,7 +28,7 @@ Scene::Scene()
 //    this->objects.push_back(new Plane(vec3(WALL_LEFT,1.0,0.0),vec3(WALL_LEFT,0.0,1.0), vec3(WALL_LEFT,0.0,0.0), SILVER));
 //    this->objects.push_back(new Plane(vec3(WALL_RIGHT,1.0,0.0),vec3(WALL_RIGHT,0.0,1.0), vec3(WALL_RIGHT,0.0,0.0), SILVER));
     // TODO: Cal afegir llums a l'escena (punt 4 de l'enunciat)
-    this->addLlum(new Llum(vec3(0.0,0.5,9.0)));
+    this->addLlum(new Llum(vec3(0.0,0.0,9.0)));
 }
 
 Scene::~Scene()
@@ -91,7 +92,8 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
 
     IntersectInfo info;
 
-    if (CheckIntersection(ray,info)) {
+    bool intersect = CheckIntersection(ray,info);
+    if (intersect) {
         /* TODO: Canviar aquesta assignacio pel color basat amb la il.luminacio basada amb Phong-Blinn segons
          * el material de l'objecte i les llums per l'apartat 4 de la practica
          * I per l'apartat 5, cal fer que tambe es tinguin en compte els rebots de les reflexions.
@@ -99,25 +101,34 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
            Inicialment s'ha posat la direccio del raig per tenir un color diferents per a cada pixel pero
            payload ha d'anar tenint el color actualitzat segons els rebots.
         */
-        if (payload.numBounces > MAX_REFLECT) {
+        //vec3 phongColor = shade(info,ray);
+        /*if (length(phongColor-payload.color) < TOL){
+            cout << "max_tol" << endl;
+            return info.time;
+        }*/
+        if (payload.numBounces >= MAX_REFLECT) {
+            payload.color = shade(info,ray);
             return info.time;
         }
-        vec3 phongColor = shade(info,ray);
-        if (length(phongColor-payload.color) < TOL){
-            return info.time;
-        }
-        payload.color += shade(info,ray);
-        vec3 R = (2.0f*dot(info.normal,ray.direction))*info.normal - ray.direction;
-        Ray reflected(info.hitPoint, R);
+        vec3 R = -(2.0f*dot(info.normal,ray.direction))*info.normal + ray.direction;
+        Ray reflected(info.hitPoint + EPSILON*R, R);
         payload.numBounces++;
         CastRay(reflected, payload);
+
+        payload.color = shade(info,ray) + info.material->specular * payload.color;
+        /*vec3 R = (2.0f*dot(info.normal,ray.direction))*info.normal - ray.direction;
+        Ray reflected(info.hitPoint, R);
+        */
         return info.time;
     }
-    else{
-        //payload.color = vec3(0.2f);
+    else {
+        payload.color = this->llumAmbient;
+                // Si el ray des de la camera no intersecta amb cap objecte
+                // no s'ha de veure res, encara que també es podria posar el color de la Intensita ambien global
+                return -1.0f;
+
         // Si el ray des de la camera no intersecta amb cap objecte
         // no s'ha de veure res, encara que també es podria posar el color de la Intensita ambien global
-        return -1.0f;
     }
 }
 
@@ -170,7 +181,7 @@ vec3 Scene::calculatePhong(IntersectInfo info, Ray &ray)
 
         atenuation = atenuateFactor(j, llums[j]->atenuate, info.hitPoint);
 
-        vec3 llumAmbient = vec3(0.0,0.0,0.0); // hasta que no sepamos si hay o no
+        vec3 llumAmbient = this->llumAmbient; // hasta que no sepamos si hay o no
         c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * info.material->ambient;
     }
     return c;

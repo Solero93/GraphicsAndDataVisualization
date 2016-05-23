@@ -7,7 +7,7 @@ Material::Material(){
     //Default material
     ambient = vec3(0.2,0.2,0.2);
     diffuse = vec3(0.8,0.0,0.0);
-    specular = vec3(1.0,1.0,1.0);
+    specular = vec3(0.3,0.3,0.3);
     shininess = 20.0;
 }
 
