@@ -3,7 +3,7 @@
 
 #define EPSILON 0.0001f
 #define TOL 0.0001f
-#define MAX_REFLECT 1
+#define MAX_REFLECT 0
 
 #include <llum.h>
 #include "Camera.h"

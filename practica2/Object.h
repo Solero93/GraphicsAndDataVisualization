@@ -49,6 +49,8 @@ class Plane : public Object {
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;
     Plane(vec3,vec3,vec3,
           const mat4 &transform = mat4(1.0f), const Material &material = Material());
+    Plane(vec3, vec3,
+          const mat4 &transform = mat4(1.0f), const Material &material = Material());
     vec3 p1;
     vec3 p2;
     vec3 p3;

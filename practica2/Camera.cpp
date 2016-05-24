@@ -2,7 +2,7 @@
 
 Camera::Camera():
     //obs(glm::vec3(4.9f,4.9f,4.9f)),
-    obs(glm::vec3(0.0f, -2.0f, 10.0f)),
+    obs(glm::vec3(-10.0f, 10.0f, 10.0f)),
     vrp(glm::vec3(0.0f, 0.0f, 0.0f)),
     vup(glm::vec3(0.0f, 1.0f, 0.0f)),
     angleObertura(45.0f), zNear(1.0f), zFar(1000.0f),

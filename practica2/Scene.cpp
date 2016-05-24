@@ -19,16 +19,23 @@ Scene::Scene()
     // TODO: Cal crear els objectes de l'escena (punt 2 de l'enunciat)
     this->llumAmbient = vec3(0.1,0.1,0.1);
 
-//    this->objects.push_back(new Sphere(vec3(0.0,0.0,0.0),1.0));
-    this->objects.push_back(new Sphere(vec3(0.0,3.0,0.0),1.0));
-    this->objects.push_back(new Plane(vec3(1.0,0.0,WALL_FRONT),vec3(0.0,1.0,WALL_FRONT), vec3(0.0,0.0,WALL_FRONT), SILVER));
+    this->objects.push_back(new Sphere(vec3(0.0,0.0,0.0),1.0));
+    //this->objects.push_back(new Sphere(vec3(0.0,3.0,0.0),1.0));
+    Material mat1(vec3(0.0,0.0,0.0),vec3(0.55,0.55,0.55),vec3(0.7,0.7,0.7),32);
+    Material mat2(vec3(0.0,0.0,0.0),vec3(0.0,0.0,0.95),vec3(0.7,0.7,0.7),32);
+    Material mat3(vec3(0.0,0.0,0.0),vec3(0.0,0.6,0.5),vec3(0.7,0.7,0.7),32);
+//    this->objects.push_back(new Plane(vec3(-10.0,-3.0,-10.0),vec3(0.0,1.0,0.0), mat4(1.0f), mat1));
+//    this->objects.push_back(new Plane(vec3(-10.0,-10.0,-3.0),vec3(0.0,0.0,1.0), mat4(1.0f), mat2));
+//    this->objects.push_back(new Plane(vec3(4.0,-10.0,-10.0),vec3(-1.0,0.0,0.0), mat4(1.0f), mat3));
+    //this->objects.push_back(new Plane(vec3(1.0,0.0,WALL_FRONT),vec3(0.0,1.0,WALL_FRONT), vec3(0.0,0.0,WALL_FRONT), SILVER));
 //    this->objects.push_back(new Plane(vec3(1.0, 0.0, WALL_BACK),vec3(0.0, 1.0, WALL_BACK), vec3(0.0, 0.0, WALL_BACK), SILVER));
 //    this->objects.push_back(new Plane(vec3(1.0,WALL_UP,0.0),vec3(0.0,WALL_UP,1.0), vec3(0.0,WALL_UP,0.0), SILVER));
 //    this->objects.push_back(new Plane(vec3(1.0,WALL_DOWN,0.0),vec3(0.0,WALL_DOWN,1.0), vec3(0.0,WALL_DOWN,0.0), SILVER));
 //    this->objects.push_back(new Plane(vec3(WALL_LEFT,1.0,0.0),vec3(WALL_LEFT,0.0,1.0), vec3(WALL_LEFT,0.0,0.0), SILVER));
 //    this->objects.push_back(new Plane(vec3(WALL_RIGHT,1.0,0.0),vec3(WALL_RIGHT,0.0,1.0), vec3(WALL_RIGHT,0.0,0.0), SILVER));
     // TODO: Cal afegir llums a l'escena (punt 4 de l'enunciat)
-    this->addLlum(new Llum(vec3(0.0,0.0,9.0)));
+    this->addLlum(new Llum(vec3(2.0,2.0,2.0)));
+    this->addLlum(new Llum(vec3(0.0,5.0,0.0)));
 }
 
 Scene::~Scene()
@@ -56,7 +63,7 @@ bool Scene::CheckIntersection(const Ray &ray, IntersectInfo &info) {
     IntersectInfo tmp;
     bool trobat = false;
     for(unsigned int i = 0; i < objects.size(); i++) {
-        if (objects[i]->Intersect(ray, tmp) && tmp.time > 0 && tmp.time < info.time){
+        if (objects[i]->Intersect(ray, tmp) && tmp.time > 0.0f && tmp.time < info.time){
             info.hitPoint = tmp.hitPoint;
             info.material = tmp.material;
             info.normal = tmp.normal;
@@ -101,7 +108,6 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
            Inicialment s'ha posat la direccio del raig per tenir un color diferents per a cada pixel pero
            payload ha d'anar tenint el color actualitzat segons els rebots.
         */
-        //vec3 phongColor = shade(info,ray);
         /*if (length(phongColor-payload.color) < TOL){
             cout << "max_tol" << endl;
             return info.time;
@@ -132,27 +138,14 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
     }
 }
 
-/*IntersectInfo Scene::closestIntersection(Ray ray){
-    IntersectInfo info;
-    objects[0]->Intersect(ray, info);
-    IntersectInfo nearest = info;
-    for(unsigned int i = 1; i < objects.size(); i++){
-        objects[i]->Intersect(ray, info);
-        if (length(info.hitPoint - cam->obs) < length(nearest.hitPoint - cam->obs)){
-            nearest = info;
-        }
-    }
-    return nearest;
-}*/
-
 vec3 Scene::shade(IntersectInfo info, Ray ray){
     vec3 c = llumAmbient * info.material->ambient;
-    IntersectInfo tmp = info;
+    IntersectInfo tmp;
 
-    for(int i=0; i<llums.size(); i++){
+    for(int i=0; i < llums.size(); i++){
         vec3 L = llums[i]->position - info.hitPoint;
         Ray r(tmp.hitPoint + EPSILON*L, L);
-        if (CheckIntersection(r, info)){
+        if (CheckIntersection(r, tmp) && tmp.time < 1.0f && tmp.time > 0.0f){
             c += llums[i]->ambient * info.material->ambient;
         } else {
             c += calculatePhong(info, r);
@@ -179,10 +172,11 @@ vec3 Scene::calculatePhong(IntersectInfo info, Ray &ray)
         specularTmp = info.material->specular * llums[j]->specular * pow(glm::max(dot(N,H),0.0f), info.material->shininess);
         ambientTmp = info.material->ambient * llums[j]->ambient;
 
-        atenuation = atenuateFactor(j, llums[j]->atenuate, info.hitPoint);
+        //atenuation = atenuateFactor(j, llums[j]->atenuate, info.hitPoint);
+        atenuation = 1.0f;
 
         vec3 llumAmbient = this->llumAmbient; // hasta que no sepamos si hay o no
-        c += (diffuseTmp + specularTmp + ambientTmp) * atenuation + llumAmbient * info.material->ambient;
+        c += (diffuseTmp + specularTmp + ambientTmp) * atenuation;
     }
     return c;
   }

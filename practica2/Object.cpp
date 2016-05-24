@@ -37,6 +37,12 @@ Plane::Plane(vec3 p1, vec3 p2, vec3 p3, const mat4 &transform, const Material &m
     this->normal = normalize(cross((p2-p1),(p3-p1)));
 }
 
+Plane::Plane(vec3 p1, vec3 normal, const mat4 &transform, const Material &material)
+    : Object(transform, material){
+    this->p1 = p1;
+    this->normal = normal;
+}
+
 Triangle::Triangle(vec3 p1, vec3 p2, vec3 p3,const mat4 &transform, const Material &material)
     : Plane(p1,p2,p3,transform, material){}
 
@@ -55,9 +61,9 @@ bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
     float a1 = -(dot(u,(o-c))) + sqrt(discriminant);
     float a2 = -(dot(u,(o-c))) - sqrt(discriminant);
 
-    float time = ((abs(a1) < abs(a2)) ? a1 : a2);
+    float time;
 
-    if (a1 < 0.0){
+    if (a1 < 0.0) {
         return false;
     } else if (a2 < 0.0) {
         time = a1;
