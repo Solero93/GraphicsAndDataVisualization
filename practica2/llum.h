@@ -20,7 +20,7 @@ class Llum {
         vec3 atenuate;
 
         Llum(vec3 pos, vec3 amb=vec3(0.2,0.2,0.2), vec3 dif=vec3(0.8,0.8,0.8),
-             vec3 spec=vec3(1.0,1.0,1.0), vec3 atenuate=vec3(1.0,0.0,0.0));
+             vec3 spec=vec3(1.0,1.0,1.0), vec3 atenuate=vec3(0.05,0.2,0.0));
 };
 
 #endif // LLUM_H

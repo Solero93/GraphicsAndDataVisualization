@@ -53,11 +53,13 @@ bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
     vec3 u = ray.direction;
     vec3 c = this->center;
     float r = this->radius;
-    // If there's no intersection, return false;
     float discriminant = (dot(u,(o-c))*dot(u,(o-c))) - (dot(u,u))*((dot(o-c,o-c)) - (r*r));
+
+    // If there's no intersection, return false;
     if (discriminant < 0.0) {
         return false;
     }
+
     float a1 = -(dot(u,(o-c))) + sqrt(discriminant);
     float a2 = -(dot(u,(o-c))) - sqrt(discriminant);
 
@@ -74,9 +76,7 @@ bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
     return true;
 }
 
-/* TODO: Implementar en el punt 2 */
 bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
-
     //https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
     vec3 p0 = this->p1;
     vec3 n = this->normal;
