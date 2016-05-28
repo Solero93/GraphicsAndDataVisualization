@@ -156,10 +156,9 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
 
 vec3 Scene::shade(IntersectInfo info, Ray ray){
     vec3 c = llumAmbient * info.material->ambient;
-    IntersectInfo tmp;
 
     for(int i=0; i < llums.size(); i++){
-        vec3 puntE = tmp.hitPoint + EPSILON*(llums[i]->position - info.hitPoint);
+        vec3 puntE = info.hitPoint + EPSILON*(llums[i]->position - info.hitPoint);
         vec3 L = llums[i]->position - puntE;
         Ray r(puntE, L);
         if (CheckIntersectionLlum(r)) {

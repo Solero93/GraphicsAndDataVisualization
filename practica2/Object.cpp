@@ -50,26 +50,20 @@ Triangle::Triangle(vec3 p1, vec3 p2, vec3 p3,const mat4 &transform, const Materi
 bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
     //https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
     vec3 o = ray.origin;
-    vec3 u = normalize(ray.direction);
+    vec3 u = ray.direction;
     vec3 c = this->center;
     float r = this->radius;
     // If there's no intersection, return false;
-    float discriminant = (dot(u,(o-c))*dot(u,(o-c))) - (dot(o-c,o-c)) + (r*r);
+    float discriminant = (dot(u,(o-c))*dot(u,(o-c))) - (dot(u,u))*((dot(o-c,o-c)) - (r*r));
     if (discriminant < 0.0) {
         return false;
     }
     float a1 = -(dot(u,(o-c))) + sqrt(discriminant);
     float a2 = -(dot(u,(o-c))) - sqrt(discriminant);
 
-    float time = (a1 < a2 && a1 > 0.0) ? a1 : a2;
+    float time = (a1 < a2) ? a1 : a2;
 
-//    if (a1 < 0.0) {
-//        return false;
-//    } else if (a2 < 0.0) {
-//        time = a1;
-//    } else {
-//        time = a2;
-//    }
+    time/=dot(u,u);
 
     vec3 result = o + time*u;
     info.time = time;
