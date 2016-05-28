@@ -54,22 +54,22 @@ bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
     vec3 c = this->center;
     float r = this->radius;
     // If there's no intersection, return false;
-    float discriminant = (dot(u,(o-c))*dot(u,(o-c))) - length((o-c))*length((o-c)) + r*r;
+    float discriminant = (dot(u,(o-c))*dot(u,(o-c))) - (dot(o-c,o-c)) + (r*r);
     if (discriminant < 0.0) {
         return false;
     }
     float a1 = -(dot(u,(o-c))) + sqrt(discriminant);
     float a2 = -(dot(u,(o-c))) - sqrt(discriminant);
 
-    float time;
+    float time = (a1 < a2 && a1 > 0.0) ? a1 : a2;
 
-    if (a1 < 0.0) {
-        return false;
-    } else if (a2 < 0.0) {
-        time = a1;
-    } else {
-        time = a2;
-    }
+//    if (a1 < 0.0) {
+//        return false;
+//    } else if (a2 < 0.0) {
+//        time = a1;
+//    } else {
+//        time = a2;
+//    }
 
     vec3 result = o + time*u;
     info.time = time;
@@ -94,9 +94,9 @@ bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
         return false;
     }
     float time = (dot((p0-l0),n))/(dot(l,n));
-    if (time < 0.0) {
+    /*if (time < 0.0) {
         return false;
-    }
+    }*/
 
     info.time = time;
     info.hitPoint = time * l + l0;

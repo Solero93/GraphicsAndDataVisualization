@@ -1,9 +1,9 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#define EPSILON 0.0001f
+#define EPSILON 0.0002f
 #define TOL 0.0001f
-#define MAX_REFLECT 0
+#define MAX_REFLECT 1
 
 #include <llum.h>
 #include "Camera.h"
@@ -20,6 +20,7 @@ public:
     ~Scene();
 
     bool  CheckIntersection(const Ray &ray, IntersectInfo &info);
+    bool CheckIntersectionLlum(const Ray &ray);
     float CastRay(Ray &ray, Payload &payload);
 
     /*
@@ -41,7 +42,7 @@ public:
 
     /*metodes de calcular les llums*/
     float atenuateFactor(int j, vec3 atenuate, vec3);
-    vec3 calculatePhong(IntersectInfo, Ray&);
+    vec3 calculatePhong(int, IntersectInfo, Ray&);
     IntersectInfo closestIntersection(Ray ray);
     vec3 shade(IntersectInfo info, Ray ray);
 };
