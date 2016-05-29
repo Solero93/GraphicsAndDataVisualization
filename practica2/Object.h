@@ -61,7 +61,12 @@ class Plane : public Object {
 class Triangle : public Plane {
   public:
     virtual bool Intersect(const Ray &ray, IntersectInfo &info) const;
+    bool isPointOfTriangle(vec3) const;
+    float sign (vec2, vec2, vec2) const;
     Triangle(vec3,vec3,vec3,
              const mat4 &transform = mat4(1.0f), const Material &material = Material());
-    bool isPointOfTriangle(vec3);
+    mat4 changeOfBasis;
+    vec2 p1_;
+    vec2 p2_;
+    vec2 p3_;
 };

@@ -44,7 +44,23 @@ Plane::Plane(vec3 p1, vec3 normal, const mat4 &transform, const Material &materi
 }
 
 Triangle::Triangle(vec3 p1, vec3 p2, vec3 p3,const mat4 &transform, const Material &material)
-    : Plane(p1,p2,p3,transform, material){}
+    : Plane(p1,p2,p3,transform, material){
+    // Cambiamos de base para tomar referencia en
+        // {p1; p1p2, p1p3, normal}
+    // Con eso conseguimos proyectar sobre el plano y la pertenencia al triángulo
+        // Es simplemente aplicar la fórmula para pertenencia a triángulo en un plano
+    vec3 tmp;
+    tmp = this->p2 - this->p1;
+    vec4 base1 = vec4(tmp.x, tmp.y, tmp.z, 0.0);
+    tmp = this->p3 - this->p1;
+    vec4 base2 = vec4(tmp.x, tmp.y, tmp.z, 0.0);
+    vec4 base3 = vec4(this->normal.x, this->normal.y, this->normal.z, 0.0);
+    vec4 origin = vec4(this->p1.x, this->p1.y, this->p1.z, 1.0);
+    this->changeOfBasis = mat4(base1, base2, base3, origin);
+    this->p1_ = vec2(changeOfBasis * vec4(this->p1.x,this->p1.y,this->p1.z,0.0));
+    this->p2_ = vec2(changeOfBasis * vec4(this->p2.x,this->p2.y,this->p2.z,0.0));
+    this->p3_ = vec2(changeOfBasis * vec4(this->p3.x,this->p3.y,this->p3.z,0.0));
+}
 
 /* TODO: Implementar en el punt 2 */
 bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
@@ -87,10 +103,8 @@ bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
     if (dot(l,n) == 0.0){
         return false;
     }
+
     float time = (dot((p0-l0),n))/(dot(l,n));
-    /*if (time < 0.0) {
-        return false;
-    }*/
 
     info.time = time;
     info.hitPoint = time * l + l0;
@@ -99,8 +113,24 @@ bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
     return true;
 }
 
-/* TODO: Implementar com a extensio */
+// EXTENSIÓ
 bool Triangle::Intersect(const Ray &ray, IntersectInfo &info) const {
-    /*bool t = Plane::Intersect(&ray, &info);
-    return (!t || this->isPointOfTriangle(info.hitPoint));*/
+    return (Plane::Intersect(ray, info) && this->isPointOfTriangle(info.hitPoint));
+}
+
+float Triangle::sign (vec2 p1, vec2 p2, vec2 p3) const {
+    return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+}
+
+bool Triangle::isPointOfTriangle(vec3 point) const {
+    // Proyectamos el punto sobre el plano y miramos si pertenece al triángulo
+    vec2 p_ = vec2(this->changeOfBasis * vec4(point.x, point.y, point.z, 0.0));
+
+    bool b1, b2, b3;
+
+    b1 = this->sign(p_, p1_, p2_) < 0.0f;
+    b2 = this->sign(p_, p2_, p3_) < 0.0f;
+    b3 = this->sign(p_, p3_, p1_) < 0.0f;
+
+    return ((b1 == b2) && (b2 == b3));
 }

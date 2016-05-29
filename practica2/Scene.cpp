@@ -13,6 +13,7 @@ Scene::Scene()
     this->objects.push_back(new Sphere(vec3(0.0,3.0,0.0),1.0));
     this->objects.push_back(new Sphere(vec3(3.0,0.0,0.0),1.0));
     this->objects.push_back(new Sphere(vec3(0.0,0.0,3.0),1.0));
+
     Material mat1(vec3(0.0,0.0,0.0),vec3(0.55,0.55,0.55),vec3(0.05,0.05,0.05),32.0);
     Material mat2(vec3(0.0,0.0,0.0),vec3(0.0,0.0,0.95),vec3(0.5,0.5,0.5),32.0);
     Material mat3(vec3(0.0,0.0,0.0),vec3(0.0,0.6,0.5),vec3(0.1,0.1,0.1),32.0);
@@ -20,6 +21,7 @@ Scene::Scene()
     this->objects.push_back(new Plane(vec3(-10.0,-3.0,-10.0),vec3(0.0,1.0,0.0), mat4(1.0f), mat1));
     this->objects.push_back(new Plane(vec3(-10.0,-10.0,-3.0),vec3(0.0,0.0,1.0), mat4(1.0f), mat2));
     this->objects.push_back(new Plane(vec3(4.0,-10.0,-10.0),vec3(-1.0,0.0,0.0), mat4(1.0f), mat3));
+    this->objects.push_back(new Triangle(vec3(-2.0,0.0,0.0),vec3(-2.0,3.0,0.0), vec3(-1.5,0.0,3.0)));
 
     this->addLlum(new Llum(vec3(2.0,2.0,2.0)));
     this->addLlum(new Llum(vec3(0.0,5.0,0.0)));

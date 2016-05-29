@@ -25,7 +25,7 @@ void Render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Netejar la finestra OpenGL
 
     // TODO: Cridar a IniViewProjMatrices de la classe camera (punt 2 de l'enunciat)
-    scene->cam->IniViewProjMatrices(1.0 + 1.0/3.0, 1.0);
+    scene->cam->IniViewProjMatrices(4.0/3.0, 1.0);
 
     glBegin(GL_POINTS);	//S'activa el mode GL_POINTS. En aquest mode
                         // cada vertex especificat és un punt.
