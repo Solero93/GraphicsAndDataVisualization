@@ -13,7 +13,6 @@ public:
     Camera(const vec3 &_obs,
                    const vec3 &_vrp,
                    const vec3 &_vup,
-                   float _angleObertura,
                    float _zNear,
                    float _zFar,
                    int _viewportX,
