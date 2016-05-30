@@ -42,15 +42,6 @@ void Render()
             float pixelX =  2*((x+0.5f)/scene->cam->viewportX)-1;
             float pixelY = -2*((y+0.5f)/scene->cam->viewportY)+1;
 
-
-            // TODO: A canviar en el punt 3 de la pràctica. Ara s'esta suposant que l'observador està situat al punt
-            // 0,0,10 i s'està considerant que el angle d'obertura es de arcos (1/10) i la relació de l'amplada i l'alçada
-            // es 1. Aixi, sota aquests suposits, les coordenades de window es poden calcular amb el calcul
-            // de pixelX, pixelY i les coordenades mon i de camera es poden considerar les mateixes.
-
-            // TODO: Cal canviar aquestes 2 linies per a fer la transformacio de pixel a coordenades de mon de forma correcta
-            // en qualsevol transformacio perspectiva
-
             /*
              * 1. Coger dos puntos p1, p2 tal que z_p1 = -1 y z_p2 = 1 (el z_p2 tiene que ser z_near)
              * 2. formar recta de ellos, interseccionar y encontrar lo primero que choque
@@ -100,9 +91,6 @@ int main(int argc, char **argv) {
 
     //Posa la funcio Render per a que la window GL cridi quan es refresca
 	glutDisplayFunc(Render);
-  
-    //	TODO: Afegir els objectes a l'escena
-    //  TODO: Afegir les llums a l'escena
 
 	atexit(cleanup);
 

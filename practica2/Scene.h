@@ -1,8 +1,8 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#define EPSILON 0.0002f
-#define TOL 0.0001f
+#define EPSILON 0.02f
+#define TOL 0.01f
 #define MAX_REFLECT 10
 
 #include <llum.h>
@@ -19,8 +19,8 @@ public:
     Scene();
     ~Scene();
 
-    bool  CheckIntersection(const Ray &ray, IntersectInfo &info);
-    bool CheckIntersectionLlum(const Ray &ray);
+    bool CheckIntersection(const Ray &ray, IntersectInfo &info);
+    bool CheckIntersectionShadow(const Ray &ray);
     float CastRay(Ray &ray, Payload &payload);
 
     /*

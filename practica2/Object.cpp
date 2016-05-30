@@ -57,12 +57,12 @@ Triangle::Triangle(vec3 p1, vec3 p2, vec3 p3,const mat4 &transform, const Materi
     vec4 base3 = vec4(this->normal.x, this->normal.y, this->normal.z, 0.0);
     vec4 origin = vec4(this->p1.x, this->p1.y, this->p1.z, 1.0);
     this->changeOfBasis = mat4(base1, base2, base3, origin);
-    this->p1_ = vec2(changeOfBasis * vec4(this->p1.x,this->p1.y,this->p1.z,0.0));
-    this->p2_ = vec2(changeOfBasis * vec4(this->p2.x,this->p2.y,this->p2.z,0.0));
-    this->p3_ = vec2(changeOfBasis * vec4(this->p3.x,this->p3.y,this->p3.z,0.0));
+
+    this->p1_ = vec2(changeOfBasis * vec4(this->p1.x, this->p1.y, this->p1.z, 0.0));
+    this->p2_ = vec2(changeOfBasis * vec4(this->p2.x, this->p2.y, this->p2.z, 0.0));
+    this->p3_ = vec2(changeOfBasis * vec4(this->p3.x, this->p3.y, this->p3.z, 0.0));
 }
 
-/* TODO: Implementar en el punt 2 */
 bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
     //https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
     vec3 o = ray.origin;
@@ -72,7 +72,7 @@ bool Sphere::Intersect(const Ray &ray, IntersectInfo &info) const {
     float discriminant = (dot(u,(o-c))*dot(u,(o-c))) - (dot(u,u))*((dot(o-c,o-c)) - (r*r));
 
     // If there's no intersection, return false;
-    if (discriminant < 0.0) {
+    if (discriminant < FLOAT_EPSILON) {
         return false;
     }
 
@@ -100,7 +100,7 @@ bool Plane::Intersect(const Ray &ray, IntersectInfo &info) const {
     vec3 l0 = ray.origin;
     vec3 l = ray.direction;
 
-    if (dot(l,n) == 0.0){
+    if (fabs(dot(l,n)) < FLOAT_EPSILON){
         return false;
     }
 
@@ -128,9 +128,9 @@ bool Triangle::isPointOfTriangle(vec3 point) const {
 
     bool b1, b2, b3;
 
-    b1 = this->sign(p_, p1_, p2_) < 0.0f;
-    b2 = this->sign(p_, p2_, p3_) < 0.0f;
-    b3 = this->sign(p_, p3_, p1_) < 0.0f;
+    b1 = this->sign(p_, p1_, p2_) < FLOAT_EPSILON;
+    b2 = this->sign(p_, p2_, p3_) < FLOAT_EPSILON;
+    b3 = this->sign(p_, p3_, p1_) < FLOAT_EPSILON;
 
     return ((b1 == b2) && (b2 == b3));
 }

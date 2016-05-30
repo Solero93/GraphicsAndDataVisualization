@@ -2,6 +2,8 @@
 
 #include "Ray.h"
 
+#define FLOAT_EPSILON 0.0001f
+
 using namespace glm;
 
 class Material {
