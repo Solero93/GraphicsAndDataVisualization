@@ -88,11 +88,9 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
 
     bool intersect = CheckIntersection(ray,info);
     if (intersect) {
-
-        vec3 phongColor = shade(info,ray);
         // Si el color calculat nou no aporta gaire o ens hem passat del nombre màxim de rebots, parem.
-        if (length(phongColor - payload.color) < TOL || payload.numBounces >= MAX_REFLECT) {
-            payload.color = phongColor;
+        if (payload.numBounces >= MAX_REFLECT) {
+            payload.color = shade(info,ray);
             return info.time;
         }
         // En cas contrari, calculem raig reflectit i seguim amb la recursió.

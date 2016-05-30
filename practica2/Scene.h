@@ -2,8 +2,8 @@
 #define SCENE_H
 
 #define EPSILON 0.02f
-#define TOL 0.01f
-#define MAX_REFLECT 10
+#define TOL 0.000001f
+#define MAX_REFLECT 1
 
 #include <llum.h>
 #include "Camera.h"
