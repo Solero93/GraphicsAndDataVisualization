@@ -97,12 +97,9 @@ float Scene::CastRay(Ray &ray, Payload &payload) {
            Inicialment s'ha posat la direccio del raig per tenir un color diferents per a cada pixel pero
            payload ha d'anar tenint el color actualitzat segons els rebots.
         */
-        /*if (length(phongColor-payload.color) < TOL){
-            cout << "max_tol" << endl;
-            return info.time;
-        }*/
-        if (payload.numBounces >= MAX_REFLECT) {
-            payload.color = shade(info,ray);
+        vec3 phongColor = shade(info,ray);
+        if (length(phongColor-payload.color) < TOL || payload.numBounces >= MAX_REFLECT) {
+            payload.color = phongColor;
             return info.time;
         }
         vec3 R = -(2.0f*dot(info.normal,ray.direction))*info.normal + ray.direction;
