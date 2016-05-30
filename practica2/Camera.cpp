@@ -26,7 +26,6 @@ void Camera::IniViewProjMatrices(float width, float height)
 {
     float angleRad = 2.0f * atan((height / (2.0f * zNear)));
     this->angleObertura = angleRad * (180.0f / M_PI);
-    this->angleObertura = 45.0f;
 
     this->viewMatrix = lookAt(obs,vrp,vup);
     this->projMatrix = perspective(angleObertura,width/height,zNear,zFar);

@@ -47,7 +47,7 @@ Triangle::Triangle(vec3 p1, vec3 p2, vec3 p3,const mat4 &transform, const Materi
     : Plane(p1,p2,p3,transform, material){
     // Cambiamos de base para tomar referencia en
         // {p1; p1p2, p1p3, normal}
-    // Con eso conseguimos proyectar sobre el plano y la pertenencia al triángulo
+    // Con eso conseguimos proyectar sobre el plano y la pertenencia al triángulo (la tercera componente si trabajamos sobre el plano, la obviamos)
         // Es simplemente aplicar la fórmula para pertenencia a triángulo en un plano
     vec3 tmp;
     tmp = this->p2 - this->p1;
